@@ -2,42 +2,83 @@
 
 The opencode-tdd plugin is configured to load **globally** across all projects using OpenCode's auto-load directory.
 
-## Current Configuration
+## Installation Steps
 
-### Global Plugin Directory (Auto-Load)
-Location: `~/.config/opencode/plugin/opencode-tdd` → symlink to `/path/to/opencode-tdd`
-
-OpenCode **automatically loads** all plugins in `~/.config/opencode/plugin/` without needing any configuration file!
-
-### Global Commands Directory
-Location: `~/.config/opencode/command/tdd/` → symlink to `/path/to/opencode-tdd/commands`
-
-Commands are symlinked separately because OpenCode discovers commands from `~/.config/opencode/command/`, not from plugin directories.
-
-### Global Config (Clean)
-Location: `~/.config/opencode/opencode.json`
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json"
-}
+### 1. Clone/Setup the Repository
+```bash
+git clone https://github.com/yourusername/opencode-tdd.git
+cd opencode-tdd
+npm install
+npm run build
 ```
 
-No plugin specified here - the auto-load directory handles it!
+### 2. Create Plugin Symlinks
+
+OpenCode requires a **TypeScript file** in the plugin directory to discover plugins. We need two symlinks:
+
+```bash
+# Create plugin directory if it doesn't exist
+mkdir -p ~/.config/opencode/plugin ~/.config/opencode/command
+
+# Symlink 1: Plugin entry point (.ts file - REQUIRED for discovery!)
+ln -sf /path/to/opencode-tdd/plugin.ts ~/.config/opencode/plugin/opencode-tdd.ts
+
+# Symlink 2: Commands directory
+ln -sf /path/to/opencode-tdd/commands ~/.config/opencode/command/tdd
+```
+
+**Important:** Replace `/path/to/opencode-tdd` with your actual path!
+
+### 3. Verify Setup
+
+```bash
+# Check symlinks
+ls -la ~/.config/opencode/plugin/opencode-tdd.ts
+ls -la ~/.config/opencode/command/tdd/
+
+# Should see:
+# opencode-tdd.ts -> /path/to/opencode-tdd/plugin.ts
+# tdd -> /path/to/opencode-tdd/commands
+```
+
+### 4. Restart OpenCode
+
+Start OpenCode in any project - the plugin should load automatically!
+
+## Configuration Summary
+
+After installation, you'll have:
+
+**Plugin Entry Point:**
+`~/.config/opencode/plugin/opencode-tdd.ts` → symlink to `/path/to/opencode-tdd/plugin.ts`
+
+**Commands Directory:**
+`~/.config/opencode/command/tdd/` → symlink to `/path/to/opencode-tdd/commands`
+
+**Global Config (Optional):**
+`~/.config/opencode/opencode.json` - No plugin config needed!
 
 ## How It Works
 
 ```
 OpenCode starts
     ↓
-Automatically scans ~/.config/opencode/plugin/
+Scans ~/.config/opencode/plugin/ for .ts files
     ↓
-Finds symlink: opencode-tdd → /path/to/opencode-tdd
+Finds opencode-tdd.ts (symlinked to plugin.ts) ✅
     ↓
-Loads dist/index.js from that directory
+Transpiles and loads the TypeScript file
+    ↓
+plugin.ts re-exports from ./dist/index.mjs
+    ↓
+Registers tools: tdd_init, tdd_status, tdd_next, tdd_state ✅
+    ↓
+Registers agents: @actor, @critic, @orchestrator, @architect ✅
     ↓
 Plugin active in ALL projects! ✅
 ```
+
+**Key Insight:** OpenCode's auto-load system requires a **`.ts` file directly in the plugin directory**. It does NOT auto-discover plugins from subdirectories. That's why we need the `plugin.ts` entry point.
 
 ## Why This Method Is Best
 
@@ -91,13 +132,29 @@ npm run build
 
 ```
 ~/.config/opencode/
-├── opencode.json              # Global OpenCode config (clean)
-└── plugin/                    # Auto-load directory
-    └── opencode-tdd/          # Symlink → /path/to/opencode-tdd
-        ├── dist/              # Built JavaScript (auto-loaded)
-        ├── commands/          # Slash commands (auto-discovered)
-        ├── src/               # Your source code
-        └── package.json
+├── opencode.json                  # Global OpenCode config (optional)
+├── plugin/
+│   └── opencode-tdd.ts           # Entry point (symlink → plugin.ts) ✅
+└── command/
+    └── tdd/                       # Commands (symlink → commands/)
+        ├── prd.md
+        ├── spec.md
+        ├── test-spec.md
+        ├── agent-spec.md
+        ├── tasks.md
+        ├── tdd-init.md
+        ├── tdd-start.md
+        ├── tdd-status.md
+        └── architect-full.md
+
+/path/to/opencode-tdd/             # Your dev directory
+├── plugin.ts                      # Plugin entry point (re-exports from dist/)
+├── dist/                          # Built JavaScript
+│   ├── index.js
+│   └── index.mjs
+├── commands/                      # Command markdown files
+├── src/                           # TypeScript source
+└── package.json
 ```
 
 ## Per-Project Configuration (Optional)
@@ -139,73 +196,103 @@ opencode
 
 ## Disabling the Plugin
 
-### Option 1: Remove the symlink
+### Option 1: Remove the plugin entry point
 ```bash
-rm ~/.config/opencode/plugin/opencode-tdd
-# Plugin no longer loads
+rm ~/.config/opencode/plugin/opencode-tdd.ts
+# Plugin no longer loads (commands still work)
 ```
 
 ### Option 2: Temporarily rename it
 ```bash
-mv ~/.config/opencode/plugin/opencode-tdd ~/.config/opencode/plugin/opencode-tdd.disabled
-# Plugin disabled, easy to re-enable
+mv ~/.config/opencode/plugin/opencode-tdd.ts ~/.config/opencode/plugin/opencode-tdd.ts.disabled
+# Plugin disabled, easy to re-enable by renaming back
 ```
 
-### Option 3: Override in specific project
-Create `opencode.json` in a specific project to disable just there:
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": []
-}
+### Option 3: Disable everything (commands too)
+```bash
+rm ~/.config/opencode/plugin/opencode-tdd.ts
+rm ~/.config/opencode/command/tdd
+# Both plugin and commands disabled
 ```
 
 ## Re-enabling After Removal
 
 ```bash
-ln -sf /path/to/opencode-tdd ~/.config/opencode/plugin/opencode-tdd
+# Re-create the plugin entry point symlink
+ln -sf /path/to/opencode-tdd/plugin.ts ~/.config/opencode/plugin/opencode-tdd.ts
+
+# Re-create the commands symlink
+ln -sf /path/to/opencode-tdd/commands ~/.config/opencode/command/tdd
+
 # Plugin is globally available again!
 ```
 
 ## Troubleshooting
 
+### Tools not available (tdd_init, tdd_status, etc.)
+
+**Symptom**: Commands like `/tdd/init` work, but when they try to use the `tdd_init` tool, you get "tool not found" errors.
+
+**Cause**: The plugin isn't loading because OpenCode can't find the `.ts` entry point file.
+
+**Fix**: Verify the plugin entry point symlink exists:
+```bash
+ls -la ~/.config/opencode/plugin/opencode-tdd.ts
+# Should show: opencode-tdd.ts -> /path/to/opencode-tdd/plugin.ts
+```
+
+If it doesn't exist, create it:
+```bash
+ln -sf /path/to/opencode-tdd/plugin.ts ~/.config/opencode/plugin/opencode-tdd.ts
+```
+
+**Why this is required**: OpenCode's auto-load system scans for `.ts` files directly in `~/.config/opencode/plugin/`. It does NOT automatically discover plugins from subdirectories. The `plugin.ts` file is the entry point that re-exports the built plugin.
+
 ### OpenCode freezes on startup
 
-**Cause**: Plugin specified in config file trying to install from npm/bun
+**Cause**: Plugin specified in config file trying to install from npm/bun, or corrupt TypeScript file
 
-**Fix**: Remove plugin from `~/.config/opencode/opencode.json` and rely on auto-load directory only:
+**Fix 1**: Remove plugin from `~/.config/opencode/opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json"
 }
 ```
 
-### Plugin not loading
-
-Check the symlink exists:
+**Fix 2**: Temporarily disable the plugin entry point:
 ```bash
-ls -la ~/.config/opencode/plugin/opencode-tdd
-# Should show: opencode-tdd -> /path/to/opencode-tdd
+mv ~/.config/opencode/plugin/opencode-tdd.ts ~/.config/opencode/plugin/opencode-tdd.ts.disabled
 ```
 
-Check the build exists:
+Then restart OpenCode to see if it starts normally.
+
+### Commands work but tools don't
+
+**Symptom**: You can run `/tdd/init` and see the command, but it says "tdd_init tool not found"
+
+**Cause**: Commands and tools are separate. Commands are markdown files (always work), tools require the plugin to load.
+
+**Fix**: Check if the plugin is loading by verifying:
 ```bash
-ls /path/to/opencode-tdd/dist/
-# Should show: index.js and index.mjs
+# 1. Entry point exists
+ls -la ~/.config/opencode/plugin/opencode-tdd.ts
+
+# 2. Entry point points to valid file
+cat ~/.config/opencode/plugin/opencode-tdd.ts
+# Should show: export { default } from './dist/index.mjs'
+
+# 3. Built files exist
+ls -la /path/to/opencode-tdd/dist/
+# Should show: index.js and index.mjs (recent timestamps)
 ```
 
-Rebuild if needed:
+### Plugin not loading after rebuild
+
+After modifying source code and rebuilding, restart OpenCode for changes to take effect:
 ```bash
 cd /path/to/opencode-tdd
 npm run build
-```
-
-### Commands not available
-
-OpenCode auto-discovers commands from the `commands/` directory. Check they exist:
-```bash
-ls /path/to/opencode-tdd/commands/
-# Should show: tdd-init.md, tdd-start.md, etc.
+# Then restart OpenCode in any project
 ```
 
 ## Publishing to NPM (Future)
