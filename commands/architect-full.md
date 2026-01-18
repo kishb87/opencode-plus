@@ -1,11 +1,14 @@
 ---
-description: Generate all foundational documents (PRD, spec, tests, tasks)
+description: Generate all foundational documents (PRD, spec, tests, tasks) in one go
 agent: architect
 ---
 
 # Generate Complete Foundational Documents
 
-You are generating ALL foundational documents for a TDD project.
+You are generating ALL foundational documents for a TDD project in a single session.
+
+**Alternative:** For iterative document creation with review between each step, use individual commands:
+- `/tdd/prd` → Review → `/tdd/spec` → Review → `/tdd/test-spec` → Review → `/tdd/agent-spec` → Review → `/tdd/tasks`
 
 ## Phase 0: Requirements Gathering
 
