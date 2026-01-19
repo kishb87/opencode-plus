@@ -165,35 +165,71 @@ You'll receive:
 - Common implementation approaches
 - Gotchas and best practices
 
-#### Step 1.4: Update or Append to research.md
+#### Step 1.4: Create Research Files in research/ Directory
 
-**If .context/research.md exists**:
-- Add "## Implementation Patterns" section
-- Synthesize research for each implementation topic
+Create individual research files in `.context/research/` for each implementation topic.
 
-**If .context/research.md doesn't exist yet**:
-- Create it with implementation research
+**For each topic, create `.context/research/[topic-name].md`**:
 
-**Format**:
 ```markdown
-## Implementation Patterns
+# [Topic] Implementation
 
-### [Feature 1] Implementation
+**Generated**: [Date]
+**Libraries**: [Libraries used]
+**Official Docs**: [URLs]
 
-**Approach**: [How it's typically done]
-**Key Steps**: [1, 2, 3...]
-**Code Pattern**: [Brief example or reference]
-**Gotchas**: [Common mistakes to avoid]
+## Overview
 
-### [Feature 2] Implementation
+[What this is and why it's used in this project]
 
-[Same structure]
+## Approach
+
+[How this is typically implemented]
+
+## Key Steps
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Code Pattern
+
+```[language]
+[Brief example code]
+```
+
+## Common Gotchas
+
+1. **[Gotcha 1]**: [Description]
+   - Solution: [How to avoid]
+
+## Integration
+
+[How this integrates with other components]
+
+## References
+
+- [URL 1]
+- [URL 2]
+```
+
+**Update `.context/research/TOC.md`**:
+
+Add entry for each new research file:
+
+```markdown
+### Implementation Patterns
+
+- **[jwt-authentication.md](./jwt-authentication.md)** - JWT auth implementation
+- **[file-uploads.md](./file-uploads.md)** - File upload handling
+
+[Add all new research files to TOC]
 ```
 
 ### Phase 2: Create Task Files
 
 1. Read all context documents: `@.context/prd.md`, `@.context/spec/`, `@.context/test/`, `@.context/agent-spec.md`
-2. Read implementation research from `.context/research.md#implementation-patterns`
+2. Read implementation research from `.context/research/` (check TOC.md for available research)
 3. Identify major features from PRD
 4. Break down each feature into implementation tasks
 5. Order tasks by dependencies

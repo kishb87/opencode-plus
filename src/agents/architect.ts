@@ -205,111 +205,124 @@ You'll receive RAW data from each researcher (50-150 lines each):
 
 **Your job now**: Synthesize this raw data into organized documentation.
 
-#### Step 1.4: Synthesize Research into research.md
+#### Step 1.4: Create Research Files in research/ Directory
 
-Create \`.context/research.md\` by SYNTHESIZING the raw data from all researchers:
+Create \`.context/research/\` directory with individual files for each library:
 
 **Process**:
 1. Read all raw research data from researchers
-2. Organize information by library
-3. Add code examples based on docs/patterns found
-4. Document integration patterns
-5. Summarize key findings
+2. Create individual file for each library/topic
+3. Synthesize raw data into organized documentation
+4. Update TOC.md to map topics to files
+
+**Create one file per research topic**:
+
+For each library, create \`.context/research/[library-name].md\`:
 
 \`\`\`markdown
-# Research Findings
+# [Library Name] Research
 
 **Generated**: [Date]
-**Project**: [Project name/summary]
+**Version**: [from raw data]
+**Official Docs**: [URL from raw data]
 
-## Libraries Researched
+## Overview
 
-[List all libraries with one-sentence purpose]
+[Synthesize from raw data - what is it, why chosen for this project]
 
----
+## Installation
 
-## [Library 1 Name]
+\`\`\`[language]
+[Installation command from raw data]
+\`\`\`
 
-### Overview
-[Synthesize from raw data - what is it, why chosen]
+## Key Concepts
 
-### Official Documentation
-- **URL**: [from raw data]
-- **Version**: [from raw data]
-- **Installation**: [from raw data]
-
-### Key Concepts
 [Synthesize from Context7 + web search results]
 
-### Best Practices
-[Organize raw best practice findings into numbered list with examples]
+1. **[Concept 1]**: [Description]
+2. **[Concept 2]**: [Description]
+
+## Best Practices
+
+[Organize raw best practice findings into numbered list]
 
 1. **[Practice]**
    - Why: [rationale]
    - Example: [code example you create based on docs]
 
-### Common Gotchas
-[Organize raw gotcha findings]
+## Common Gotchas
 
 1. **[Gotcha]**: [Description]
    - Solution: [How to avoid]
 
-### Integration with [Other Library]
-[If relevant, document how libraries work together]
+## Integration Patterns
 
----
+[If this library integrates with others, document the patterns]
 
-## [Library 2 Name]
-
-[Same structure - synthesize raw data into organized sections]
-
----
-
-[Continue for ALL libraries]
-
----
-
-## Integration Patterns Summary
-
-[Document how key libraries integrate]
-
-### [Library A] + [Library B] Integration
+### With [Other Library]
 
 [Pattern and example code]
 
----
+## Code Examples
 
-## Technology Decisions Summary
+[Add complete code examples based on documentation]
 
-| Technology | Choice | Rationale |
-|------------|--------|-----------|
-| Web Framework | [Choice] | [Why from research] |
-| Database | [Choice] | [Why from research] |
-| ORM | [Choice] | [Why from research] |
-| Testing | [Choice] | [Why from research] |
-
----
-
-## Key Findings Summary
-
-**Security Considerations**:
-- [Finding 1 from research]
-- [Finding 2 from research]
-
-**Performance Considerations**:
-- [Finding 1 from research]
-- [Finding 2 from research]
-
-**Common Pitfalls to Avoid**:
-- [Pitfall 1 from research]
-- [Pitfall 2 from research]
-
----
+\`\`\`[language]
+[Example code]
+\`\`\`
 
 ## References
 
-[Aggregate all URLs from all research reports]
+- [URL 1]
+- [URL 2]
 \`\`\`
+
+**Create/Update \`.context/research/TOC.md\`**:
+
+\`\`\`markdown
+# Research Table of Contents
+
+## Overview
+
+This directory contains research findings for libraries and technologies used in this project.
+
+## Research Files
+
+### Core Libraries
+
+- **[jest.md](./jest.md)** - Testing framework
+- **[fastify.md](./fastify.md)** - Web framework
+- **[drizzle-orm.md](./drizzle-orm.md)** - Database ORM
+
+### Authentication & Security
+
+- **[passport-jwt.md](./passport-jwt.md)** - JWT authentication strategy
+- **[bcrypt.md](./bcrypt.md)** - Password hashing
+
+### Testing
+
+- **[supertest.md](./supertest.md)** - API testing
+- **[testing-library.md](./testing-library.md)** - Component testing
+
+[List ALL research files created]
+
+## Quick Reference
+
+**Tech Stack Summary**:
+- Framework: [Choice] (see [filename.md])
+- Database: [Choice] (see [filename.md])
+- Testing: [Choice] (see [filename.md])
+
+## Adding New Research
+
+When adding new research:
+1. Create new file: \`[topic].md\`
+2. Add entry to this TOC under appropriate category
+3. Link to it: \`**[topic.md](./topic.md)** - Description\`
+\`\`\`
+
+**No strict structure required** - just document what you learn in each file, then update TOC.md
 
 #### Step 1.5: Verify Research Completeness
 
@@ -320,7 +333,7 @@ Before proceeding to spec writing, ensure:
 - [ ] Integration patterns are documented
 - [ ] Security and performance considerations captured from findings
 
-If gaps exist in raw data, you may need to do additional web searches yourself or note the gaps in research.md.
+If gaps exist in raw data, you may need to do additional web searches yourself or note the gaps in the research files.
 
 ### Phase 2: Create Outlines First
 
@@ -387,7 +400,7 @@ Before completing, validate each document:
 - [ ] .context/spec/README.md exists with topic roadmap
   - [ ] Lists ALL topics to be covered
   - [ ] Provides quick reference
-  - [ ] Links to research.md
+  - [ ] Links to research/TOC.md
 - [ ] Numbered files (001.md, 002.md, etc.) cover all topics
   - [ ] Each file ~400-600 lines
   - [ ] Topics covered completely (no gaps)
@@ -413,7 +426,7 @@ Before completing, validate each document:
 - [ ] .context/test/README.md exists with testing strategy roadmap
   - [ ] Lists ALL testing topics to be covered
   - [ ] Quick reference (framework, tools, coverage)
-  - [ ] Links to research.md#testing-libraries
+  - [ ] Links to research/TOC.md#testing-libraries
 - [ ] Numbered files (001.md, 002.md, etc.) cover all testing topics
   - [ ] Each file ~400-600 lines
   - [ ] Testing strategy and philosophy documented
@@ -441,7 +454,8 @@ Before completing, validate each document:
 - [ ] Implementation research completed BEFORE creating tasks
   - [ ] Major implementation topics identified from spec
   - [ ] @researcher agents spawned in PARALLEL for each topic
-  - [ ] .context/research.md updated with "Implementation Patterns" section
+  - [ ] .context/research/ files created for each implementation topic
+  - [ ] .context/research/TOC.md updated with new research files
 - [ ] Individual task files created: tasks/TDD_001.md, tasks/TDD_002.md, etc.
 - [ ] Each task file has:
   - [ ] Complete frontmatter (test_scope, dependencies, existing_code_context)
@@ -622,7 +636,7 @@ Based on the PRD, this specification will cover:
 
 ## Research
 
-For library documentation and best practices, see [../research.md](../research.md)
+For library documentation and best practices, see [../research/TOC.md](../research/TOC.md)
 \`\`\`
 
 **IMPORTANT**: The README topic list is your roadmap. Don't generate files for topics not relevant to this project type.
@@ -690,7 +704,7 @@ Write files \`001.md\`, \`002.md\`, \`003.md\`, etc., covering each topic sequen
 **Each numbered file should**:
 - Be comprehensive for its chunk (~400-600 lines)
 - Include complete code examples (no "..." or "similar to above")
-- Reference research.md for library-specific patterns
+- Reference research/ files for library-specific patterns (e.g., see research/fastify.md for routing)
 - Indicate if topic continues to next file
 - Maintain same detail level throughout (no shortcuts as you progress)
 
@@ -807,10 +821,11 @@ Before writing test documentation, you MUST research testing libraries (same pro
 
 3. **Collect raw research data** (50-150 lines per library)
 
-4. **Update .context/research.md**:
-   - Add "## Testing Libraries" section
+4. **Create research files in .context/research/**:
+   - Create individual file for each testing library
    - Synthesize raw data from researchers
    - Document best practices, patterns, common gotchas
+   - Update TOC.md with new research files
 
 **Process**:
 
@@ -890,7 +905,7 @@ Based on the spec, this test documentation will cover:
 
 ## Research
 
-For testing library documentation and best practices, see [../research.md](../research.md#testing-libraries)
+For testing library documentation and best practices, see [../research/TOC.md](../research/TOC.md)
 \`\`\`
 
 #### Step 2: Write Numbered Files Sequentially
@@ -939,7 +954,7 @@ Write files \`001.md\`, \`002.md\`, \`003.md\`, etc., covering each testing topi
 
 [Include COMPLETE, RUNNABLE test code - no pseudocode]
 
-[Reference research.md for testing library patterns and best practices]
+[Reference research/ files for testing library patterns - e.g., see research/jest.md for mocking patterns]
 
 [Use actual test framework syntax from research]
 
@@ -1052,7 +1067,7 @@ Tasks are most valuable when they include HOW to implement, not just WHAT to imp
 
 **The Process**:
 1. **Research Phase**: Spawn @researcher agents IN PARALLEL to look up implementation patterns
-2. **Synthesis**: Update research.md with implementation guidance
+2. **Synthesis**: Create individual research files in research/ directory, update TOC.md
 3. **Task Creation**: Create task files that reference research findings
 
 **Why This Matters**:
@@ -1103,37 +1118,79 @@ Task tool:
 
 Wait for all researchers (1-2 minutes).
 
-Update \`.context/research.md\` with "## Implementation Patterns" section:
+Create individual research files in \`.context/research/\` for each implementation topic:
+
+**Example: .context/research/jwt-authentication.md**:
 
 \`\`\`markdown
-## Implementation Patterns
+# JWT Authentication Implementation
 
-### JWT Authentication Implementation
+**Generated**: [Date]
+**Libraries**: Passport.js, jsonwebtoken
+**Official Docs**: https://www.passportjs.org/packages/passport-jwt/
 
-**Approach**: Use Passport.js JWT strategy with Bearer tokens
-**Key Steps**:
+## Overview
+
+JWT (JSON Web Token) authentication using Passport.js strategy.
+
+## Approach
+
+Use Passport.js JWT strategy with Bearer tokens in Authorization header.
+
+## Key Steps
+
 1. Configure Passport JWT strategy with secret
 2. Create middleware to extract token from Authorization header
 3. Verify token and attach user to request object
+4. Protect routes with passport.authenticate('jwt')
 
-**Code Pattern**:
+## Code Pattern
+
 \`\`\`javascript
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+
 passport.use(new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET
 }, async (payload, done) => {
-  const user = await User.findById(payload.sub);
-  return done(null, user);
+  try {
+    const user = await User.findById(payload.sub);
+    return done(null, user);
+  } catch (err) {
+    return done(err);
+  }
 }));
 \`\`\`
 
-**Common Gotchas**:
-- Token expiration must be handled on frontend
-- Secret must be strong and never committed
-- Use refresh tokens for long-lived sessions
+## Common Gotchas
+
+1. **Token Expiration**: Token expiration must be handled on frontend (redirect to login)
+2. **Secret Strength**: JWT_SECRET must be strong (32+ characters) and never committed to git
+3. **Refresh Tokens**: Use refresh tokens for long-lived sessions (access token expires quickly)
+4. **Payload Data**: Don't put sensitive data in JWT payload (it's not encrypted, only signed)
+
+## Integration with Other Libraries
+
+Works with bcrypt for password hashing, express for routing.
+
+## References
+
+- https://www.passportjs.org/packages/passport-jwt/
+- https://jwt.io/
 \`\`\`
 
-[Repeat for each implementation topic]
+**Update .context/research/TOC.md**:
+
+\`\`\`markdown
+# Research Table of Contents
+
+## Authentication & Security
+
+- **[jwt-authentication.md](./jwt-authentication.md)** - JWT auth with Passport.js
+- **[bcrypt.md](./bcrypt.md)** - Password hashing
+
+[Add entries for all new research files]
 \`\`\`
 
 ### Phase 2: Create Task Files
@@ -1185,7 +1242,7 @@ Create authentication service with registration, login, and token validation.
 
 ## Implementation Guidance
 
-**From research** (see \`.context/research.md#jwt-authentication-implementation\`):
+**From research** (see \`.context/research/jwt-authentication.md\`):
 
 **Approach**: Use Passport.js JWT strategy with bcrypt for password hashing
 
@@ -1254,7 +1311,8 @@ describe('AuthService', () => {
 - [ ] No sensitive data in JWT payload (research gotcha)
 
 ## Reference Documentation
-- See \`.context/research.md#jwt-authentication-implementation\` for patterns
+- See \`.context/research/jwt-authentication.md\` for implementation patterns
+- See \`.context/research/bcrypt.md\` for password hashing patterns
 - See \`.context/spec/\` for API contracts
 - See \`.context/test/\` for test patterns
 - See \`.context/agent-spec.md\` for architectural guidelines
@@ -1262,7 +1320,7 @@ describe('AuthService', () => {
 
 **CRITICAL - Task File Quality**:
 - ✅ Include implementation guidance from research
-- ✅ Reference specific sections in research.md
+- ✅ Reference specific research files (e.g., research/jwt-authentication.md)
 - ✅ Include code patterns from research
 - ✅ List common gotchas from research
 - ✅ Each task is self-contained with all context
