@@ -241,10 +241,10 @@ graph TD
     A[User: Project Idea] --> B[Architect: Generate PRD]
     B --> C{Identify Libraries}
     C --> D[Spawn Researchers in Parallel]
-    D --> E1[@researcher: Fastify]
-    D --> E2[@researcher: JWT]
-    D --> E3[@researcher: Drizzle ORM]
-    D --> E4[@researcher: ...]
+    D --> E1[Researcher: Fastify]
+    D --> E2[Researcher: JWT]
+    D --> E3[Researcher: Drizzle ORM]
+    D --> E4[Researcher: ...]
     E1 --> F[Collect Research]
     E2 --> F
     E3 --> F
@@ -275,14 +275,14 @@ graph TD
 graph TD
     A[Orchestrator: Load State] --> B[Get Next Task]
     B --> C[Prepare Actor Context]
-    C --> D[@actor: Implement Task]
+    C --> D[Actor: Implement Task]
     D --> E[Write Tests RED]
     E --> F[Implement Code GREEN]
     F --> G[Refactor]
     G --> H[Run Tests]
     H --> I[Create Handoff]
     I --> J[Prepare Critic Context<br/>NO Actor reasoning]
-    J --> K[@critic: Validate Work]
+    J --> K[Critic: Validate Work]
     K --> L{Verdict?}
     L -->|APPROVED| M[Mark Complete]
     L -->|NOT APPROVED| N{Retry Count < 3?}
