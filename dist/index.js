@@ -1964,6 +1964,22 @@ Before completing, validate each document:
 
 **Process**:
 
+**\u{1F6A8} CRITICAL - TOPICS MUST COME FROM PRD \u{1F6A8}**
+
+DO NOT use a prescriptive template. The spec documents what's IN THE PRD, not what you think should be there.
+
+- \u274C **WRONG**: "Every project needs Database Schema, API Endpoints, Security sections"
+- \u2705 **CORRECT**: "Read PRD \u2192 Identify what it requires \u2192 Document only those topics"
+
+**Examples**:
+- PRD for CLI tool \u2192 Document: Command parsing, Plugin system, Config (NO database, NO API)
+- PRD for library \u2192 Document: API surface, Core algorithms (NO deployment, NO security unless mentioned)
+- PRD for web app \u2192 Document: Frontend, Backend, Database, Auth (ONLY if PRD mentions each)
+
+**If PRD doesn't mention databases, don't create database schemas.**
+**If PRD doesn't mention APIs, don't document API endpoints.**
+**If PRD doesn't mention security, don't add security sections.**
+
 #### Step 1: Write README.md (Topic Roadmap)
 
 Create \`.context/spec/README.md\` with high-level topic list:
@@ -1981,18 +1997,24 @@ Create \`.context/spec/README.md\` with high-level topic list:
 
 ## Topics to Cover
 
+**CRITICAL**: List ONLY topics mentioned in the PRD. Don't add database, API, security, or deployment sections unless the PRD explicitly requires them.
+
 Based on the PRD, this specification will cover:
 
-1. **System Architecture** - High-level design, tech stack, integration patterns
-2. **Database Schema** - Complete table definitions, relationships, migrations
-3. **API Endpoints** - All REST/GraphQL endpoints with full specs
-4. **Frontend Components** - Component hierarchy, state management [if applicable]
-5. **Authentication & Security** - Auth flow, permissions, security practices
-6. **Error Handling** - Error codes, validation, error responses
-7. **File Structure** - Project organization
-8. **Deployment** - Infrastructure, CI/CD [if applicable]
+1. **[Topic from PRD]** - [Description based on PRD requirements]
+2. **[Topic from PRD]** - [Description based on PRD requirements]
+3. **[Topic from PRD]** - [Description based on PRD requirements]
+4. **[Topic from PRD]** - [Description based on PRD requirements]
+...
 
-[List ALL topics that need documentation for this specific project]
+**Examples of topics derived from different PRDs**:
+- CLI tool: Command parsing, Plugin system, Configuration
+- Library: API surface, Core algorithms, Integration patterns
+- Web app with DB: Frontend components, Backend API, Database schema, Auth flow
+- Static site generator: Template engine, Content processing, Build pipeline
+- Data processing pipeline: Data ingestion, Transform logic, Output formats
+
+[List ALL topics that need documentation for THIS SPECIFIC PROJECT based on the PRD]
 
 ## Quick Reference
 
@@ -2016,7 +2038,7 @@ Write files \`001.md\`, \`002.md\`, \`003.md\`, etc., covering each topic sequen
 
 **Topics Spanning Multiple Files**: If a topic needs more than 600 lines, continue it in the next file.
 
-**Example for Full-Stack Project**:
+**Example 1: Full-Stack Web App** (if PRD requires database, API, frontend, auth, deployment):
 - \`001.md\` - System Architecture (complete in one file, 450 lines)
 - \`002.md\` - Database Schema Part 1 (users, sessions tables, 520 lines)
 - \`003.md\` - Database Schema Part 2 (posts, comments tables, 480 lines)
@@ -2030,17 +2052,28 @@ Write files \`001.md\`, \`002.md\`, \`003.md\`, etc., covering each topic sequen
 - \`011.md\` - File Structure (complete, 380 lines)
 - \`012.md\` - Deployment (complete, 350 lines)
 
-**Total**: 12 files, 5,740 lines - comprehensive documentation, no timeouts
+**Total**: 12 files, 5,740 lines
 
-**Example for Frontend-Only Project**:
+**Example 2: Frontend-Only Project** (if PRD requires only UI components, no backend):
 - \`001.md\` - Component Architecture (380 lines)
-- \`002.md\` - State Management with Redux (520 lines)
+- \`002.md\` - State Management (520 lines)
 - \`003.md\` - Routing & Navigation (410 lines)
 - \`004.md\` - API Integration Layer (450 lines)
 - \`005.md\` - Styling & Theming (390 lines)
 - \`006.md\` - File Structure (340 lines)
 
-**Total**: 6 files, 2,490 lines - complete for frontend scope
+**Total**: 6 files, 2,490 lines
+
+**Example 3: CLI Tool** (if PRD requires command-line interface, no database/API):
+- \`001.md\` - Command Parsing & Flags (420 lines)
+- \`002.md\` - Plugin Architecture (480 lines)
+- \`003.md\` - Configuration System (390 lines)
+- \`004.md\` - Core Command Implementations (550 lines)
+- \`005.md\` - File Structure (310 lines)
+
+**Total**: 5 files, 2,150 lines
+
+**IMPORTANT**: These are illustrative examples based on different PRD types. Your actual topics and file count will vary based on YOUR PRD's requirements.
 
 **Writing Each File**:
 \`\`\`markdown
@@ -2075,33 +2108,18 @@ After ALL numbered files are written, create \`.context/spec/TOC.md\`:
 
 This shows which numbered files contain which topics.
 
-### System Architecture
+### [Topic 1 Name from PRD]
 - **001.md** - Complete
+- **002.md** - Part 2 (if topic spans multiple files)
 
-### Database Schema
-- **002.md** - Users, sessions tables
-- **003.md** - Posts, comments tables
+### [Topic 2 Name from PRD]
+- **003.md** - Part 1
+- **004.md** - Part 2
 
-### API Endpoints
-- **004.md** - Authentication endpoints
-- **005.md** - User management endpoints
-- **006.md** - Post and comment endpoints
+### [Topic 3 Name from PRD]
+- **005.md** - Complete
 
-### Frontend Components
-- **007.md** - Layout and auth components
-- **008.md** - Dashboard and forms
-
-### Authentication & Security
-- **009.md** - Complete
-
-### Error Handling
-- **010.md** - Complete
-
-### File Structure
-- **011.md** - Complete
-
-### Deployment
-- **012.md** - Complete
+[Map ALL topics from your README.md to their file ranges]
 
 ## Navigation
 
@@ -2109,6 +2127,45 @@ To find documentation for a specific topic:
 1. Check this TOC for the file range
 2. Open the corresponding numbered files
 3. See [README.md](./README.md) for topic overview
+\`\`\`
+
+**Example TOC.md for Full-Stack Web App**:
+\`\`\`markdown
+### System Architecture
+- **001.md** - Complete
+
+### Database Schema
+- **002-003.md** - All tables
+
+### API Endpoints
+- **004-006.md** - All endpoints
+
+### Frontend Components
+- **007-008.md** - All components
+
+### Authentication
+- **009.md** - Complete
+
+### File Structure
+- **010.md** - Complete
+\`\`\`
+
+**Example TOC.md for CLI Tool**:
+\`\`\`markdown
+### Command Parsing
+- **001.md** - Complete
+
+### Plugin System
+- **002.md** - Complete
+
+### Configuration
+- **003.md** - Complete
+
+### Core Commands
+- **004.md** - Complete
+
+### File Structure
+- **005.md** - Complete
 \`\`\`
 
 **IMPORTANT**: TOC.md is generated LAST, after you know which files cover which topics.
@@ -2155,6 +2212,32 @@ Before writing test documentation, you MUST research testing libraries (same pro
 
 **Process**:
 
+**\u{1F6A8} CRITICAL - TEST TOPICS MUST MATCH SPEC \u{1F6A8}**
+
+Test documentation describes HOW to test what's in the spec. Don't document test types for features not in the spec.
+
+- \u274C **WRONG**: "Every project needs API tests, DB tests, E2E tests"
+- \u2705 **CORRECT**: "Read spec \u2192 Test only what's documented there"
+
+**Examples**:
+- Spec has no API \u2192 No API integration tests section
+- Spec has no database \u2192 No database integration tests section
+- Spec has no frontend \u2192 No component tests section
+- Spec mentions CLI \u2192 Document CLI command tests
+
+**Universal topics** (most projects):
+- Testing Strategy (philosophy, TDD workflow)
+- Framework Setup (configuration, test runner)
+- Test Data & Fixtures (if spec has data models)
+- Testing Conventions (file naming, organization)
+
+**Conditional topics** (only if spec mentions them):
+- Unit Tests (for functions/classes in spec)
+- Integration Tests (API tests only if spec has API, DB tests only if spec has DB)
+- Component Tests (only if spec has frontend)
+- E2E Tests (only if spec mentions user flows)
+- Performance Tests (only if spec mentions performance requirements)
+
 #### Step 1: Write README.md (Testing Strategy Roadmap)
 
 Create \`.context/test/README.md\` with testing topics to cover:
@@ -2172,19 +2255,17 @@ Create \`.context/test/README.md\` with testing topics to cover:
 
 ## Topics to Cover
 
+**IMPORTANT**: List ONLY test types for components that exist in the spec.
+
 Based on the spec, this test documentation will cover:
 
 1. **Testing Strategy** - Philosophy, coverage goals, TDD workflow
 2. **Framework Setup** - Configuration, tools, test runner setup
-3. **Test Data & Fixtures** - Factories, builders, mock data
-4. **Unit Tests** - Function/component tests with complete examples
-5. **Integration Tests** - API endpoints, database, service integration
-6. **E2E Tests** - Full user flows [if applicable]
-7. **Test Utilities** - Reusable helpers, mocks, stubs
-8. **Performance Tests** - Load/stress testing [if applicable]
-9. **Testing Conventions** - File naming, organization, patterns
+3. **[Test type for component from spec]** - [Description]
+4. **[Test type for component from spec]** - [Description]
+...
 
-[List ALL testing topics relevant to this project]
+[List ALL testing topics relevant to THIS SPECIFIC PROJECT based on what's in the spec]
 
 ## Quick Reference
 

@@ -18,23 +18,29 @@ Reference the PRD with: `@.context/prd.md`
 
 - **Minimum 1200 lines** (target 1500-3000+)
 - **EVERY implementation detail documented** - no shortcuts, no "..."
-- Complete database schemas with CREATE TABLE statements:
+- **Document what's in the PRD** - don't inject requirements not mentioned
+- Architecture diagrams (ASCII or Mermaid)
+- Technology stack with justifications
+- Complete file/folder structure
+- **If PRD includes database**:
+  - Complete schemas with CREATE TABLE statements
   - EVERY column with type and constraints
   - EVERY index and foreign key
-- Full API specifications with:
+- **If PRD includes API**:
   - EVERY endpoint fully documented (not "and 10 more endpoints")
   - Complete request/response types (TypeScript/JSON schema)
   - ALL validation rules
   - ALL error codes
   - Example requests and responses
-  - Authentication/authorization requirements
-- Architecture diagrams (ASCII or Mermaid)
-- Complete file/folder structure
-- Technology stack with justifications
-- Data models and relationships (ALL fields, not "other fields...")
-- Security considerations
-- Performance requirements
-- Deployment architecture
+- **If PRD mentions authentication**:
+  - Auth flow and implementation details
+- **If PRD mentions security requirements**:
+  - Security considerations and implementation
+- **If PRD mentions performance goals**:
+  - Performance requirements and optimization strategies
+- **If PRD mentions deployment**:
+  - Deployment architecture
+- Data models and relationships for ALL entities in the PRD (ALL fields, not "other fields...")
 
 ## Output Location
 
