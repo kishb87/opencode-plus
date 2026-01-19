@@ -26,6 +26,7 @@ import { actorAgent } from "./agents/actor"
 import { criticAgent } from "./agents/critic"
 import { orchestratorAgent } from "./agents/orchestrator"
 import { architectAgent } from "./agents/architect"
+import { researcherAgent } from "./agents/researcher"
 import { createTestTrackerHook } from "./hooks/test-tracker"
 import { createStatePersistHook } from "./hooks/state-persist"
 import { loadConfig } from "./config/loader"
@@ -72,6 +73,7 @@ export const TDDPlugin: Plugin = async (ctx) => {
         critic: criticAgent(config),
         orchestrator: orchestratorAgent(config),
         architect: architectAgent(config),
+        researcher: researcherAgent(config),
       }
     },
 
@@ -150,7 +152,7 @@ ${state.last_critic_feedback || "None"}
 export default TDDPlugin
 
 // Named exports for advanced usage
-export { actorAgent, criticAgent, orchestratorAgent, architectAgent }
+export { actorAgent, criticAgent, orchestratorAgent, architectAgent, researcherAgent }
 export { tddInitTool, tddStatusTool, tddNextTool, tddStateTool }
 export { loadConfig } from "./config/loader"
 export type { TDDConfig } from "./config/schema"

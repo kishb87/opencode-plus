@@ -42,12 +42,40 @@ Write to: `.context/spec.md`
 
 ## Process
 
+### Phase 1: Requirements & Library Identification
 1. Read and analyze `@.context/prd.md`
 2. Ask clarifying technical questions if needed
-3. Design the architecture
-4. Document all technical details section by section
-5. Include concrete, runnable examples (not pseudocode)
-6. Validate completeness against PRD requirements
+3. Identify libraries and technologies needed
+4. Confirm library list with you
+
+### Phase 2: Comprehensive Research
+1. Spawn @researcher agents in parallel for each library
+2. Each researcher uses Context7 (priority) + web search
+3. Collect comprehensive research reports (2-3 minutes)
+4. Write `.context/research.md` with all findings
+
+### Phase 3: Spec Writing
+1. Design the architecture using research findings
+2. Document all technical details section by section
+3. Reference research.md for patterns and best practices
+4. Include concrete, runnable examples (not pseudocode)
+5. Validate completeness against PRD requirements
+
+## Outputs
+
+This command generates TWO files:
+
+1. **`.context/research.md`** - Comprehensive library research
+   - All library documentation, best practices, patterns
+   - Security and performance considerations
+   - Integration examples
+   - Common pitfalls and solutions
+
+2. **`.context/spec.md`** - Technical specification
+   - Architecture and tech stack decisions (with research references)
+   - Complete database schemas
+   - Full API specifications
+   - Implementation details
 
 ## Format
 

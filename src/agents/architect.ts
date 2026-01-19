@@ -134,7 +134,154 @@ Please answer these questions, and I'll create comprehensive documents tailored 
 
 Wait for answers before proceeding.
 
-### Phase 1: Create Outlines First
+### Phase 1: Library Research (CRITICAL - Do This Before Writing)
+
+**Before writing ANY document, conduct comprehensive research on libraries and technologies.**
+
+#### Step 1.1: Identify Technologies
+
+Based on PRD + user input + clarifying answers, identify ALL libraries/frameworks needed:
+
+**Categories to consider**:
+- Web framework (Express, Fastify, Nest.js, etc.)
+- Database (PostgreSQL, MySQL, MongoDB, etc.)
+- ORM/Query builder (Prisma, Drizzle, TypeORM, Kysely, etc.)
+- Authentication (Passport.js, JWT libraries, Auth.js, etc.)
+- Validation (Zod, Yup, AJV, etc.)
+- Testing framework (Jest, Vitest, Mocha, etc.)
+- Testing utilities (Supertest, Testing Library, etc.)
+- Real-time (Socket.IO, ws, etc.)
+- Caching (Redis, Node-cache, etc.)
+- Logging (Winston, Pino, etc.)
+- Any other critical dependencies
+
+**Show list to user for confirmation**:
+\`\`\`markdown
+I'll research the following libraries:
+
+**Core**:
+- [Library 1] - [Purpose]
+- [Library 2] - [Purpose]
+
+**Testing**:
+- [Library 3] - [Purpose]
+
+**Infrastructure**:
+- [Library 4] - [Purpose]
+
+Proceed with research?
+\`\`\`
+
+#### Step 1.2: Spawn Researchers in Parallel
+
+For each library, invoke @researcher using the Task tool:
+
+**IMPORTANT**: Spawn ALL researchers in PARALLEL (single message, multiple Task tool calls).
+
+\`\`\`markdown
+I'll now research these libraries comprehensively. This will take 2-3 minutes.
+\`\`\`
+
+**Example for 5 libraries**:
+- Use Task tool with subagent_type="researcher"
+- Prompt: "Research [Library] for [Use Case]. Context: [Project summary]"
+- Do this for ALL libraries in ONE message
+
+Each researcher will:
+1. Try Context7 first (priority)
+2. Fall back to web search if needed
+3. Return comprehensive report
+
+#### Step 1.3: Collect Research Reports
+
+Wait for all researchers to complete. You'll receive comprehensive reports.
+
+#### Step 1.4: Write Research Documentation
+
+Create \`.context/research.md\` with ALL research findings:
+
+\`\`\`markdown
+# Research Findings
+
+**Generated**: [Date]
+**Project**: [Project name/summary]
+
+## Libraries Researched
+
+[List all libraries with one-sentence purpose]
+
+---
+
+## [Library 1 Name]
+
+[Full research report from @researcher]
+
+---
+
+## [Library 2 Name]
+
+[Full research report from @researcher]
+
+---
+
+[Continue for ALL libraries]
+
+---
+
+## Integration Patterns
+
+[Document how key libraries integrate with each other]
+
+### [Library A] + [Library B] Integration
+
+[Pattern and example code]
+
+---
+
+## Technology Decisions Summary
+
+| Technology | Choice | Rationale |
+|------------|--------|-----------|
+| Web Framework | [Choice] | [Why from research] |
+| Database | [Choice] | [Why from research] |
+| ORM | [Choice] | [Why from research] |
+| Testing | [Choice] | [Why from research] |
+
+---
+
+## Key Findings Summary
+
+**Security Considerations**:
+- [Finding 1 from research]
+- [Finding 2 from research]
+
+**Performance Considerations**:
+- [Finding 1 from research]
+- [Finding 2 from research]
+
+**Common Pitfalls to Avoid**:
+- [Pitfall 1 from research]
+- [Pitfall 2 from research]
+
+---
+
+## References
+
+[Aggregate all URLs from all research reports]
+\`\`\`
+
+#### Step 1.5: Verify Research Completeness
+
+Before proceeding to spec writing, ensure:
+- [ ] All identified libraries have research reports
+- [ ] Research.md is comprehensive (minimum 500+ lines for typical project)
+- [ ] Integration patterns are documented
+- [ ] Security and performance considerations captured
+- [ ] All researchers reported "High" confidence or gaps are noted
+
+If gaps exist, spawn follow-up researchers for specific questions.
+
+### Phase 2: Create Outlines First
 
 For each document, first create a detailed outline:
 
@@ -340,11 +487,20 @@ Before completing, validate each document:
 \`\`\`
 
 ### 1.2 Technology Stack
-- **Runtime**: Node.js 22+
-- **Framework**: Express.js
-- **Database**: PostgreSQL 16
-- **ORM**: Prisma
-- **Testing**: Jest + Supertest
+
+**IMPORTANT**: Reference research.md for rationale and best practices.
+
+- **Runtime**: Node.js 22+ (see research.md#nodejs)
+- **Framework**: Express.js (see research.md#expressjs - chosen for [reasons from research])
+- **Database**: PostgreSQL 16 (see research.md#postgresql)
+- **ORM**: Prisma (see research.md#prisma - patterns and gotchas documented)
+- **Testing**: Jest + Supertest (see research.md#jest)
+
+**Rationale**:
+[Brief summary of why this stack, citing research findings]
+
+**Key Integration Patterns** (from research):
+[Reference integration patterns from research.md]
 
 ## 2. Database Schema
 

@@ -34,6 +34,11 @@ export const TDDConfigSchema = z.object({
        * If not specified, uses the current session model
        */
       architect: z.string().optional(),
+      /**
+       * Model for Researcher agent (gathers documentation)
+       * If not specified, uses the current session model
+       */
+      researcher: z.string().optional(),
     })
     .default({}),
 
