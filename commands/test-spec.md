@@ -18,16 +18,21 @@ Reference with: `@.context/prd.md` and `@.context/spec/README.md` (or `.context/
 ## Requirements
 
 - **Minimum 500 lines TOTAL (target 1000-3000+, no upper limit) across numbered files**
-- **EVERY test type documented** - no shortcuts, no "..."
+- **Document tests for what's IN THE SPEC** - don't assume test types
 - Complete, runnable test examples (not pseudocode)
-- Test coverage for:
-  - **Unit tests** - Individual functions, components
-  - **Integration tests** - API endpoints, database operations
-  - **E2E tests** - Full user flows
-- Test fixtures and mock data examples
-- Test utilities and helpers
-- Testing strategy and philosophy
-- Performance/load test examples (if applicable)
+- **Always include**:
+  - **Testing strategy** - Philosophy, coverage goals, TDD workflow
+  - **Framework setup** - Configuration, test runner
+  - **Testing conventions** - File naming, organization
+- **Include only if spec has these components**:
+  - **Unit tests** - If spec has functions/classes to test
+  - **API integration tests** - If spec has API endpoints
+  - **Database integration tests** - If spec has database operations
+  - **Component tests** - If spec has frontend components
+  - **E2E tests** - If spec mentions user flows
+  - **Performance tests** - If spec mentions performance requirements
+- Test fixtures and mock data (if spec has data models)
+- Test utilities and helpers (reusable patterns)
 
 ## Output Location
 

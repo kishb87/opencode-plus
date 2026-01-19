@@ -2156,15 +2156,20 @@ To find documentation for a specific topic:
 
 Before writing test documentation, you MUST research testing libraries (same process as spec research):
 
-1. **Identify testing libraries** from spec:
-   - Testing framework (Jest, Vitest, pytest, etc.)
-   - Assertion library (Chai, expect, etc.)
-   - Mocking tools (jest.mock, Sinon, etc.)
-   - API testing (Supertest, MSW, etc.)
-   - E2E framework (Playwright, Cypress, etc.)
-   - Test utilities (Testing Library, factories, etc.)
+1. **Identify testing libraries** needed based on spec's tech stack and components:
+   - **Always**: Testing framework for the language (Jest for JS, pytest for Python, etc.)
+   - **If spec has mocking needs**: Mocking/stubbing library
+   - **If spec has API**: API testing library (Supertest, httptest, etc.)
+   - **If spec has frontend**: Component testing library (Testing Library, etc.)
+   - **If spec mentions E2E**: E2E framework (Playwright, Cypress, etc.)
+   - **If spec has performance requirements**: Load testing tools
 
-2. **Spawn @researcher agents in parallel** for each testing library
+   **Don't research**:
+   - API testing tools if spec has no API
+   - E2E frameworks if spec has no user flows
+   - Component testing tools if spec has no UI
+
+2. **Spawn @researcher agents in parallel** for each identified testing library
 
 3. **Collect raw research data** (50-150 lines per library)
 
@@ -2175,30 +2180,41 @@ Before writing test documentation, you MUST research testing libraries (same pro
 
 **Process**:
 
-**\u{1F6A8} CRITICAL - TEST TOPICS MUST MATCH SPEC \u{1F6A8}**
+**\u{1F6A8} CRITICAL - TEST TOPICS MUST DERIVE FROM SPEC \u{1F6A8}**
 
-Test documentation describes HOW to test what's in the spec. Don't document test types for features not in the spec.
+Test documentation describes HOW to test what's in the spec/PRD. **DO NOT assume test types**.
 
-- \u274C **WRONG**: "Every project needs API tests, DB tests, E2E tests"
-- \u2705 **CORRECT**: "Read spec \u2192 Test only what's documented there"
+- \u274C **WRONG**: "Every project needs unit tests, integration tests, E2E tests"
+- \u2705 **CORRECT**: "Read spec/PRD \u2192 Identify testable components \u2192 Document tests for those"
 
-**Examples**:
-- Spec has no API \u2192 No API integration tests section
-- Spec has no database \u2192 No database integration tests section
-- Spec has no frontend \u2192 No component tests section
-- Spec mentions CLI \u2192 Document CLI command tests
+**What to test?**
+- Read the spec carefully
+- Identify all testable components (functions, APIs, CLI commands, UI components, etc.)
+- Document tests ONLY for components that exist
+- Don't add test types for components not in the spec
 
-**Universal topics** (most projects):
-- Testing Strategy (philosophy, TDD workflow)
+**Examples of spec-driven test planning**:
+- Spec has CLI commands \u2192 Document: Command execution tests, flag parsing tests
+- Spec has library functions \u2192 Document: Unit tests for public API
+- Spec has REST API \u2192 Document: API integration tests
+- Spec has database operations \u2192 Document: Database integration tests
+- Spec has frontend components \u2192 Document: Component tests
+- Spec has user flows \u2192 Document: E2E tests
+- Spec has no API \u2192 NO API integration tests section
+- Spec has no database \u2192 NO database tests section
+- Spec has no UI \u2192 NO component/E2E tests sections
+
+**Universal topics** (appear in almost all test docs):
+- Testing Strategy (philosophy, TDD workflow, coverage goals)
 - Framework Setup (configuration, test runner)
-- Test Data & Fixtures (if spec has data models)
-- Testing Conventions (file naming, organization)
+- Testing Conventions (file naming, organization, patterns)
 
-**Conditional topics** (only if spec mentions them):
-- Unit Tests (for functions/classes in spec)
-- Integration Tests (API tests only if spec has API, DB tests only if spec has DB)
-- Component Tests (only if spec has frontend)
-- E2E Tests (only if spec mentions user flows)
+**Conditional topics** (only if spec has these):
+- Test Data & Fixtures (if spec has data models)
+- Unit Tests (for functions/classes documented in spec)
+- Integration Tests (only for integration points in spec: API, database, external services)
+- Component Tests (only if spec has UI components)
+- E2E Tests (only if spec describes user flows)
 - Performance Tests (only if spec mentions performance requirements)
 
 #### Step 1: Write README.md (Testing Strategy Roadmap)
@@ -2249,22 +2265,35 @@ Write files \`001.md\`, \`002.md\`, \`003.md\`, etc., covering each testing topi
 
 **File Size**: ~400-600 lines per file (natural stopping points)
 
-**Example for Backend API Project** (5 files, 2,450 lines):
+**Example 1: Backend API with Database** (if spec has API + database):
 - \`001.md\` - Testing Strategy & Framework Setup (480 lines)
 - \`002.md\` - Test Data, Fixtures & Factories (520 lines)
-- \`003.md\` - Unit Tests Part 1: Core functions, utilities (550 lines)
-- \`004.md\` - Unit Tests Part 2: Services, repositories (490 lines)
-- \`005.md\` - Integration Tests: API endpoints with complete examples (410 lines)
+- \`003.md\` - Unit Tests: Core functions, utilities (550 lines)
+- \`004.md\` - Unit Tests: Services, repositories (490 lines)
+- \`005.md\` - Integration Tests: API endpoints + database (410 lines)
 
-**Example for Full-Stack Project** (8 files, 4,100 lines):
+**Example 2: CLI Tool** (if spec has command-line interface, no API/DB):
+- \`001.md\` - Testing Strategy & Framework Setup (420 lines)
+- \`002.md\` - Unit Tests: Command parsing, flag handling (510 lines)
+- \`003.md\` - Unit Tests: Core command implementations (480 lines)
+- \`004.md\` - Integration Tests: CLI command execution (390 lines)
+
+**Example 3: Pure Library** (if spec is a library with no UI/API/DB):
+- \`001.md\` - Testing Strategy & Framework Setup (380 lines)
+- \`002.md\` - Unit Tests: Public API functions (540 lines)
+- \`003.md\` - Unit Tests: Internal utilities (460 lines)
+
+**Example 4: Full-Stack Web App** (if spec has backend + frontend + database + E2E):
 - \`001.md\` - Testing Strategy (380 lines)
-- \`002.md\` - Framework Setup & Configuration (420 lines)
+- \`002.md\` - Framework Setup (Jest + Vitest) (420 lines)
 - \`003.md\` - Test Data & Fixtures (540 lines)
 - \`004.md\` - Backend Unit Tests Part 1 (550 lines)
 - \`005.md\` - Backend Unit Tests Part 2 (530 lines)
-- \`006.md\` - Backend Integration Tests (610 lines)
+- \`006.md\` - Backend Integration Tests: API + DB (610 lines)
 - \`007.md\` - Frontend Component Tests (490 lines)
-- \`008.md\` - E2E Tests with Playwright/Cypress (580 lines)
+- \`008.md\` - E2E Tests with Playwright (580 lines)
+
+**IMPORTANT**: These are illustrative examples for different spec types. Your test documentation will match YOUR spec's components.
 
 **Writing Each File**:
 \`\`\`markdown
@@ -2301,6 +2330,28 @@ After ALL numbered files are written, create \`.context/test/TOC.md\`:
 
 ## File \u2192 Topic Mapping
 
+### [Test Topic 1 from README]
+- **001.md** - Complete
+
+### [Test Topic 2 from README]
+- **002.md** - Part 1
+- **003.md** - Part 2
+
+### [Test Topic 3 from README]
+- **004.md** - Complete
+
+[Map ALL test topics from your README.md to their file ranges]
+
+## Navigation
+
+To find test documentation:
+1. Check this TOC for the file range
+2. Open the corresponding numbered files
+3. See [README.md](./README.md) for testing strategy overview
+\`\`\`
+
+**Example TOC.md for Backend API**:
+\`\`\`markdown
 ### Testing Strategy
 - **001.md** - Complete
 
@@ -2311,23 +2362,43 @@ After ALL numbered files are written, create \`.context/test/TOC.md\`:
 - **003.md** - Complete
 
 ### Unit Tests
-- **004.md** - Core functions and utilities
-- **005.md** - Services and repositories
+- **004-005.md** - All unit tests
 
-### Integration Tests
-- **006.md** - API endpoints
+### API Integration Tests
+- **006.md** - All API endpoint tests
+\`\`\`
 
-### E2E Tests
-- **007.md** - User flows
+**Example TOC.md for CLI Tool**:
+\`\`\`markdown
+### Testing Strategy
+- **001.md** - Complete
 
-[etc.]
+### Framework Setup
+- **002.md** - Complete
 
-## Navigation
+### Unit Tests: Command Parsing
+- **003.md** - Complete
 
-To find test documentation:
-1. Check this TOC for the file range
-2. Open the corresponding numbered files
-3. See [README.md](./README.md) for testing strategy overview
+### Unit Tests: Core Commands
+- **004.md** - Complete
+
+### CLI Integration Tests
+- **005.md** - Command execution tests
+\`\`\`
+
+**Example TOC.md for Pure Library**:
+\`\`\`markdown
+### Testing Strategy
+- **001.md** - Complete
+
+### Framework Setup
+- **002.md** - Complete
+
+### Unit Tests: Public API
+- **003.md** - Complete
+
+### Unit Tests: Internal Utilities
+- **004.md** - Complete
 \`\`\`
 
 **Total Test Documentation**: No limit! Can be 5,000+ lines across 10+ files if project has comprehensive testing needs.
