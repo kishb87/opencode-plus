@@ -971,6 +971,20 @@ If tasks fail validation, review feedback:
 3. Ensure test command in state.json is correct
 4. Run tests manually to verify
 
+## Additional Documentation
+
+For more detailed documentation, see the [docs/](./docs) folder:
+
+- **[Installation Guide](./docs/INSTALLATION.md)** - Detailed installation and setup instructions
+- **[Agent Definitions](./docs/AGENTS.md)** - Legacy agent documentation
+- **[Architecture Analysis](./docs/ARCHITECTURE_ANALYSIS.md)** - System architecture deep dive
+- **[Architect Improvements](./docs/ARCHITECT_IMPROVEMENTS.md)** - Documentation generation improvements
+- **[Multi-File Spec](./docs/MULTI_FILE_SPEC.md)** - Numbered spec file approach
+- **[Multi-File Test](./docs/MULTI_FILE_TEST.md)** - Numbered test file approach
+- **[Researcher Agent](./docs/RESEARCHER_AGENT.md)** - Researcher agent design
+- **[Researcher Design](./docs/RESEARCHER_DESIGN.md)** - Detailed researcher architecture
+- **[Researcher Usage](./docs/RESEARCHER_USAGE_PATTERNS.md)** - How to use the researcher
+
 ## Contributing
 
 Contributions welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.

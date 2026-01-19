@@ -13,8 +13,8 @@
   "files": [
     "dist",
     "commands",
+    "docs",
     "README.md",
-    "INSTALLATION.md",
     "LICENSE"
   ],
   "scripts": {
