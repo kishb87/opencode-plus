@@ -63,15 +63,15 @@ export const TDDConfigSchema = z.object({
   documents: z
     .object({
       /** Minimum lines for PRD */
-      minPrdLines: z.number().min(50).default(200),
-      /** Minimum lines for technical spec */
-      minSpecLines: z.number().min(100).default(500),
+      minPrdLines: z.number().min(50).default(300),
+      /** Minimum lines for technical spec (MUST include ALL code) */
+      minSpecLines: z.number().min(100).default(1200),
       /** Minimum lines for test spec */
-      minTestLines: z.number().min(50).default(300),
+      minTestLines: z.number().min(50).default(500),
       /** Minimum lines for agent spec */
-      minAgentSpecLines: z.number().min(50).default(100),
+      minAgentSpecLines: z.number().min(50).default(150),
       /** Minimum lines for tasks breakdown */
-      minTasksLines: z.number().min(100).default(500),
+      minTasksLines: z.number().min(100).default(800),
     })
     .default({}),
 
