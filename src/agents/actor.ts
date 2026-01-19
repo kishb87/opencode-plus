@@ -234,6 +234,56 @@ Tests:       23 passed, 23 total
 - ❌ Work on tests outside your task's scope
 - ❌ Modify tests to make them pass (fix the implementation instead)
 
+## Using @researcher When Stuck
+
+**If you encounter problems you can't solve**, you can invoke @researcher to look up documentation.
+
+### When to Use @researcher
+
+Use the researcher when:
+- ✅ Tests failing with library API errors (e.g., "bcrypt.hash is not a function")
+- ✅ Unsure how to use a library correctly
+- ✅ Need to look up best practices for implementation
+- ✅ Error messages you don't understand
+- ✅ Need to verify correct usage of a pattern
+
+### How to Invoke @researcher
+
+Use the Task tool to spawn a researcher:
+
+\`\`\`
+Task tool:
+  subagent_type: "researcher"
+  prompt: "Look up bcrypt password hashing usage in Node.js"
+\`\`\`
+
+**Researcher will return** (in 30-60 seconds):
+- Context7 docs if available
+- Official documentation URL and version
+- Usage examples from docs
+- Common gotchas
+
+### Example: Getting Unstuck
+
+**Scenario**: Your JWT implementation is failing tests.
+
+\`\`\`
+Test error: TypeError: jwt.sign is not a function
+\`\`\`
+
+**What to do**:
+1. Invoke @researcher: "jsonwebtoken library usage Node.js"
+2. Wait for raw documentation data
+3. Review the correct API usage
+4. Fix your implementation
+5. Re-run tests
+
+**Important**:
+- Only research when STUCK, not preemptively
+- Use research to solve specific problems
+- Researcher is fast (30-60 sec), so don't hesitate to use it
+- Research is better than guessing at APIs
+
 ## Working with Test Scope
 
 Your task file includes a \`test_scope\` section:

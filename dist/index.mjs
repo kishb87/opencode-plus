@@ -728,6 +728,56 @@ Tests:       23 passed, 23 total
 - \u274C Work on tests outside your task's scope
 - \u274C Modify tests to make them pass (fix the implementation instead)
 
+## Using @researcher When Stuck
+
+**If you encounter problems you can't solve**, you can invoke @researcher to look up documentation.
+
+### When to Use @researcher
+
+Use the researcher when:
+- \u2705 Tests failing with library API errors (e.g., "bcrypt.hash is not a function")
+- \u2705 Unsure how to use a library correctly
+- \u2705 Need to look up best practices for implementation
+- \u2705 Error messages you don't understand
+- \u2705 Need to verify correct usage of a pattern
+
+### How to Invoke @researcher
+
+Use the Task tool to spawn a researcher:
+
+\`\`\`
+Task tool:
+  subagent_type: "researcher"
+  prompt: "Look up bcrypt password hashing usage in Node.js"
+\`\`\`
+
+**Researcher will return** (in 30-60 seconds):
+- Context7 docs if available
+- Official documentation URL and version
+- Usage examples from docs
+- Common gotchas
+
+### Example: Getting Unstuck
+
+**Scenario**: Your JWT implementation is failing tests.
+
+\`\`\`
+Test error: TypeError: jwt.sign is not a function
+\`\`\`
+
+**What to do**:
+1. Invoke @researcher: "jsonwebtoken library usage Node.js"
+2. Wait for raw documentation data
+3. Review the correct API usage
+4. Fix your implementation
+5. Re-run tests
+
+**Important**:
+- Only research when STUCK, not preemptively
+- Use research to solve specific problems
+- Researcher is fast (30-60 sec), so don't hesitate to use it
+- Research is better than guessing at APIs
+
 ## Working with Test Scope
 
 Your task file includes a \`test_scope\` section:
@@ -962,6 +1012,65 @@ Actor must fix the expiry validation before re-validation.
 - \u274C Modify any code (you have read-only access)
 - \u274C Provide vague feedback ("something is wrong")
 - \u274C Skip running the actual tests
+
+## Using @researcher for Validation
+
+**If you need to verify best practices or security patterns**, you can invoke @researcher.
+
+### When to Use @researcher
+
+Use the researcher when:
+- \u2705 Unsure if a security practice is current (e.g., "Is bcrypt with 10 rounds still secure?")
+- \u2705 Need to validate a library usage pattern against best practices
+- \u2705 Reviewing code with a pattern you're unfamiliar with
+- \u2705 Want to verify performance implications
+- \u2705 Need to check if a deprecation warning is serious
+
+### How to Invoke @researcher
+
+Use the Task tool to spawn a researcher:
+
+\`\`\`
+Task tool:
+  subagent_type: "researcher"
+  prompt: "bcrypt password hashing security best practices 2026"
+\`\`\`
+
+**Researcher will return** (in 30-60 seconds):
+- Context7 docs if available
+- Best practices from official sources
+- Security recommendations
+- Common gotchas and pitfalls
+
+### Example: Validating Security
+
+**Scenario**: Actor implemented password hashing with \`bcrypt.hash(password, 8)\`
+
+You're unsure if 8 rounds is secure enough.
+
+**What to do**:
+1. Invoke @researcher: "bcrypt rounds security recommendations 2026"
+2. Wait for documentation data
+3. Review findings (e.g., "Minimum 10 rounds recommended")
+4. Provide specific feedback with source
+
+**Your feedback**:
+\`\`\`
+\u274C FAIL
+
+Issue: Bcrypt rounds too low
+- Current: 8 rounds
+- Recommended: Minimum 10 rounds (per OWASP 2026)
+- Fix: Change to bcrypt.hash(password, 10)
+
+Source: [Research shows modern recommendations require 10+ rounds]
+\`\`\`
+
+**Important**:
+- Research when you need to validate something specific
+- Include research findings in your feedback
+- Provides more authoritative validation
+- Better guidance for Actor to fix issues
 
 ## Why Fresh Context?
 

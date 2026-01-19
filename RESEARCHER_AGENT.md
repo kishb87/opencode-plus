@@ -1,47 +1,59 @@
-# Researcher Agent - Comprehensive Library Research
+# Researcher Agent - Lightweight Documentation Fetcher
 
 **Added**: 2026-01-18
 **Status**: Implemented ✅
+**Type**: Lightweight data fetcher (not synthesizer)
 
 ---
 
 ## What It Does
 
-The @researcher agent conducts comprehensive research on libraries, frameworks, and technologies to inform spec generation with accurate, up-to-date information.
+The @researcher agent is a **lightweight documentation fetcher** that quickly retrieves raw docs and search results. It does NOT write long reports - it fetches data in 30-60 seconds and returns it to the calling agent for synthesis.
+
+**Used by**:
+- @architect - For comprehensive library research before writing specs
+- @actor - When stuck implementing and needs to look up APIs
+- @critic - When validating and needs to verify best practices
 
 ## Key Features
 
-### 1. **Context7 Priority**
+### 1. **Fast Data Fetching**
+- Returns in 30-60 seconds (not 5-10 minutes)
+- Fetches raw data only, no synthesis
+- Output: 50-150 lines (not 500-800)
+- Multiple researchers can run in parallel
+
+### 2. **Context7 Priority**
 - Always tries Context7 first (official documentation)
-- Falls back to web search only if needed
+- Falls back to 2-3 targeted web searches only if needed
 - Ensures most accurate, version-specific information
 
-### 2. **Parallel Execution**
-- Research multiple libraries simultaneously
-- 10 libraries in 2-3 minutes vs 15-20 minutes sequentially
-- Architect spawns all researchers at once
+### 3. **Lightweight Output**
+Each researcher returns RAW data:
+- Context7 docs (if found, pasted as-is)
+- Official docs URL and version
+- Top 3-5 best practice findings (raw)
+- Top 3-5 common gotchas (raw)
+- Source URLs
 
-### 3. **Comprehensive Reports**
-Each research report includes:
-- Official documentation links and version info
-- Installation and setup instructions
-- Core concepts with code examples
-- Best practices with rationale
-- Common patterns (with pros/cons)
-- Security considerations and mitigations
-- Performance optimization tips
-- Common pitfalls and solutions
-- Complete, runnable example implementation
-- Testing approach
-- All sources cited
+NO synthesis, NO code examples, NO long analysis - just raw facts.
 
-### 4. **Research Documentation**
-Creates `.context/research.md` with:
-- All research findings aggregated
-- Integration patterns between libraries
-- Technology decision rationale
-- Security and performance summaries
-- Comprehensive references
+### 4. **Used by Multiple Agents**
+
+**@architect** - Upfront research before writing specs
+- Spawns 5-10 researchers in parallel
+- Synthesizes raw data into `.context/research.md`
+- Uses findings to write accurate specs
+
+**@actor** - On-demand when stuck implementing
+- Single researcher for specific problem
+- Gets quick answer to unblock work
+- Example: "How do I use bcrypt?"
+
+**@critic** - On-demand when validating
+- Single researcher to verify best practices
+- Gets authoritative answer for feedback
+- Example: "Are 8 bcrypt rounds secure?"
 
 ---
 
@@ -75,87 +87,109 @@ Creates `.context/research.md` with:
 /tdd/research "Drizzle ORM with Fastify and PostgreSQL connection pooling"
 ```
 
-**Returns**: Comprehensive research report (500-800 lines)
+**Returns**: Raw research data (50-150 lines) in 30-60 seconds
+
+### Actor Uses (When Stuck)
+
+**Scenario**: Actor implementing JWT auth, tests failing
+
+Actor invokes researcher from within their work:
+```typescript
+// Tests failing with "jwt.sign is not a function"
+// Actor uses Task tool:
+//   subagent_type: "researcher"
+//   prompt: "jsonwebtoken library usage Node.js"
+
+// Researcher returns in 30-60 sec:
+// - Official docs URL
+// - Correct usage: jwt.sign(payload, secret, { expiresIn: '1h' })
+// - Common gotchas
+
+// Actor fixes code based on research
+```
+
+### Critic Uses (When Validating)
+
+**Scenario**: Critic reviewing bcrypt implementation
+
+Critic invokes researcher to verify:
+```typescript
+// Code uses: bcrypt.hash(password, 8)
+// Critic unsure if secure, uses Task tool:
+//   subagent_type: "researcher"
+//   prompt: "bcrypt rounds security best practices 2026"
+
+// Researcher returns in 30-60 sec:
+// - Recommended: 10+ rounds minimum
+// - 8 rounds considered too low for 2026
+
+// Critic provides specific feedback with source
+```
 
 ---
 
-## Research Process
+## Research Process (FAST - 30-60 seconds)
 
-### Step 1: Context7 Search (ALWAYS FIRST)
-
-```
-Try Context7 for:
-  - Official documentation
-  - API references
-  - Migration guides
-  - Best practices
-
-If found → Use as primary source
-If not found → Proceed to web search
-```
-
-### Step 2: Web Search - Official Docs
+### Step 1: Try Context7 (ALWAYS FIRST)
 
 ```
-Queries:
-  - "[Library] official documentation 2026"
-  - "[Library] API reference"
-  - "[Library] getting started guide"
+Search Context7 for the library documentation
 
-Extract:
-  - Latest version
-  - Installation commands
-  - Core concepts
+If found → Paste relevant excerpts
+If not found → Proceed to Step 2
 ```
 
-### Step 3: Web Search - Best Practices
+**Time**: 5-10 seconds
+
+### Step 2: Web Search (2-3 Targeted Queries)
+
+Run ONLY these searches:
 
 ```
-Queries:
-  - "[Library] best practices 2026"
-  - "[Library] production setup"
-  - "[Library] security best practices"
+Query 1: "[Library] official documentation 2026"
+  → Get docs URL, version, installation
 
-Extract:
-  - Recommended patterns
-  - Configuration tips
-  - Security considerations
+Query 2: "[Library] best practices 2026"
+  → Get top 3-5 best practice findings
+
+Query 3: "[Library] common gotchas"
+  → Get top 3-5 pitfall findings
 ```
 
-### Step 4: Web Search - Pitfalls
+**Time**: 20-50 seconds
+
+### Step 3: Return Raw Data
 
 ```
-Queries:
-  - "[Library] common mistakes"
-  - "[Library] gotchas"
-  - "[Library] pitfalls to avoid"
-
-Extract:
-  - Common errors
-  - Antipatterns
-  - Migration issues
+NO synthesis
+NO code examples created
+NO analysis
+JUST paste the raw findings
 ```
 
-### Step 5: Web Search - Use Case
+**Output format**:
+```markdown
+# [Library] Research Data
 
+## Context7 Results
+[Paste if found / "Not found"]
+
+## Official Documentation
+- URL: [url]
+- Version: [version]
+- Installation: [command]
+
+## Best Practices (Raw)
+[Paste top 3-5 findings]
+
+## Common Gotchas (Raw)
+[Paste top 3-5 findings]
+
+## Sources
+[URLs]
 ```
-Queries:
-  - "[Library] [use case] example 2026"
-  - "[Library] [pattern] implementation"
 
-Extract:
-  - Real-world examples
-  - Integration code
-  - Complete implementations
-```
-
-### Step 6: Synthesis
-
-Compile all findings into structured report with:
-- Summary
-- Complete code examples
-- Confidence assessment
-- References to all sources
+**Total time**: 30-60 seconds
 
 ---
 

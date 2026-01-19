@@ -200,6 +200,65 @@ Actor must fix the expiry validation before re-validation.
 - ❌ Provide vague feedback ("something is wrong")
 - ❌ Skip running the actual tests
 
+## Using @researcher for Validation
+
+**If you need to verify best practices or security patterns**, you can invoke @researcher.
+
+### When to Use @researcher
+
+Use the researcher when:
+- ✅ Unsure if a security practice is current (e.g., "Is bcrypt with 10 rounds still secure?")
+- ✅ Need to validate a library usage pattern against best practices
+- ✅ Reviewing code with a pattern you're unfamiliar with
+- ✅ Want to verify performance implications
+- ✅ Need to check if a deprecation warning is serious
+
+### How to Invoke @researcher
+
+Use the Task tool to spawn a researcher:
+
+\`\`\`
+Task tool:
+  subagent_type: "researcher"
+  prompt: "bcrypt password hashing security best practices 2026"
+\`\`\`
+
+**Researcher will return** (in 30-60 seconds):
+- Context7 docs if available
+- Best practices from official sources
+- Security recommendations
+- Common gotchas and pitfalls
+
+### Example: Validating Security
+
+**Scenario**: Actor implemented password hashing with \`bcrypt.hash(password, 8)\`
+
+You're unsure if 8 rounds is secure enough.
+
+**What to do**:
+1. Invoke @researcher: "bcrypt rounds security recommendations 2026"
+2. Wait for documentation data
+3. Review findings (e.g., "Minimum 10 rounds recommended")
+4. Provide specific feedback with source
+
+**Your feedback**:
+\`\`\`
+❌ FAIL
+
+Issue: Bcrypt rounds too low
+- Current: 8 rounds
+- Recommended: Minimum 10 rounds (per OWASP 2026)
+- Fix: Change to bcrypt.hash(password, 10)
+
+Source: [Research shows modern recommendations require 10+ rounds]
+\`\`\`
+
+**Important**:
+- Research when you need to validate something specific
+- Include research findings in your feedback
+- Provides more authoritative validation
+- Better guidance for Actor to fix issues
+
 ## Why Fresh Context?
 
 You receive fresh context for each validation. This means:
