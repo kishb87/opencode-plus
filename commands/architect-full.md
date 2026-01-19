@@ -50,11 +50,16 @@ After gathering requirements, generate these documents in order:
 - **Topics can span files**: API Endpoints might cover 003.md through 007.md
 - **No "..." or "similar to above" shortcuts**
 
-### 3. Test Spec (.context/test.md)
-- Minimum 500 lines (target 700-1200)
-- Complete, runnable test examples (not pseudocode)
-- Unit, integration, E2E tests
-- Test helpers and fixtures
+### 3. Test Spec (.context/test/)
+- **Minimum 500 lines TOTAL (target 1000+, no upper limit) across numbered files**
+- **Research testing libraries first** (Jest, Vitest, Testing Library, etc.)
+- **Numbered, chunked structure** (prevents timeouts):
+  - README.md - Testing strategy roadmap
+  - 001.md, 002.md, 003.md, ... - Numbered files (~400-600 lines each)
+  - TOC.md - File→topic mapping (created last)
+- **Complete, runnable test examples** (not pseudocode, based on research)
+- Unit, integration, E2E tests (if applicable)
+- Test helpers, fixtures, and factories
 
 ### 4. Agent Spec (.context/agent-spec.md)
 - Minimum 150 lines (target 200-300)
