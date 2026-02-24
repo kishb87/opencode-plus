@@ -27,7 +27,6 @@ export const actorAgent = (config: TDDConfig) => ({
   permission: {
     bash: "allow" as const,
     edit: "allow" as const,
-    write: "allow" as const,
   },
   prompt: `You are the Actor agent in a TDD-based development workflow. You implement ONE task per invocation with fresh context.
 

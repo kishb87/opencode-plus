@@ -29,7 +29,6 @@ export const architectAgent = (config: TDDConfig) => ({
   permission: {
     bash: "allow" as const,
     edit: "allow" as const,
-    write: "allow" as const,
   },
   prompt: `You are the Architect agent responsible for generating comprehensive foundational documents for TDD projects.
 

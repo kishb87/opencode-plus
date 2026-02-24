@@ -1,5 +1,5 @@
 import { tool } from "@opencode-ai/plugin"
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput, ToolDefinition } from "@opencode-ai/plugin"
 
 /**
  * TDD Init Tool
@@ -9,7 +9,7 @@ import type { Shell } from "@opencode-ai/plugin"
  * - .tdd/ - Workflow state (gitignored)
  * - opencode-tdd.json - Plugin configuration
  */
-export const tddInitTool = ($: Shell, directory: any) =>
+export const tddInitTool = ($: PluginInput["$"], directory: any): ToolDefinition =>
   tool({
     description: `Initialize TDD project structure with .context/, .tdd/, and opencode-tdd.json config.
 Creates initial state.json for workflow tracking.

@@ -26,9 +26,7 @@ export const researcherAgent = (config: TDDConfig) => ({
     grep: true,   // Can search codebase
     glob: true,   // Can find files
   },
-  permission: {
-    read: "allow" as const,
-  },
+  permission: {},
   prompt: `You are the Researcher agent - a LIGHTWEIGHT DATA FETCHER.
 
 ## Your Role

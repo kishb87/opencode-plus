@@ -1,4 +1,4 @@
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput } from "@opencode-ai/plugin"
 
 interface SessionEvent {
   type: string
@@ -11,7 +11,7 @@ interface SessionEvent {
  * Automatically saves TDD state on session end
  * Ensures state is not lost if session terminates unexpectedly
  */
-export const createStatePersistHook = ($: Shell, directory: string) => {
+export const createStatePersistHook = ($: PluginInput["$"], directory: string) => {
   return async (event: SessionEvent) => {
     // Auto-save state when session ends
     if (event.type === "session.idle" || event.type === "session.deleted") {
@@ -25,7 +25,7 @@ export const createStatePersistHook = ($: Shell, directory: string) => {
   }
 }
 
-async function persistState($: Shell, directory: string, isError = false) {
+async function persistState($: PluginInput["$"], directory: string, isError = false) {
   try {
     const statePath = `${directory}/.tdd/state.json`
 

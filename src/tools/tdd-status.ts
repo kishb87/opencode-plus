@@ -1,5 +1,5 @@
 import { tool } from "@opencode-ai/plugin"
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput, ToolDefinition } from "@opencode-ai/plugin"
 import { loadConfig } from "../config/loader"
 
 interface TDDState {
@@ -22,7 +22,7 @@ interface TDDState {
  *
  * Reports current TDD workflow progress and state
  */
-export const tddStatusTool = ($: Shell, directory: any) =>
+export const tddStatusTool = ($: PluginInput["$"], directory: any): ToolDefinition =>
   tool({
     description: `Check TDD workflow progress and current state.
 Shows completed tasks, current task, and next steps.`,

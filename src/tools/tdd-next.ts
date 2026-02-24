@@ -1,5 +1,5 @@
 import { tool } from "@opencode-ai/plugin"
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput, ToolDefinition } from "@opencode-ai/plugin"
 import { loadConfig } from "../config/loader"
 
 interface TDDState {
@@ -17,7 +17,7 @@ interface TDDState {
  *
  * Determines and returns the next task to work on
  */
-export const tddNextTool = ($: Shell, directory: any) =>
+export const tddNextTool = ($: PluginInput["$"], directory: any): ToolDefinition =>
   tool({
     description: `Get the next TDD task to work on.
 Returns task details including test scope and existing code context.

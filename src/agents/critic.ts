@@ -28,7 +28,6 @@ export const criticAgent = (config: TDDConfig) => ({
   permission: {
     bash: "allow" as const,
     edit: "deny" as const,
-    write: "deny" as const,
   },
   prompt: `You are the Critic agent in a TDD-based development workflow. Your job is to validate task implementations using **scoped validation** - you only evaluate tests that are in-scope for the current task.
 

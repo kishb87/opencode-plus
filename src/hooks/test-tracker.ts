@@ -1,4 +1,4 @@
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput } from "@opencode-ai/plugin"
 
 interface SessionEvent {
   type: string
@@ -11,7 +11,7 @@ interface SessionEvent {
  * Tracks test command executions and results
  * Updates test-mapping.json with test ownership
  */
-export const createTestTrackerHook = ($: Shell, directory: string) => {
+export const createTestTrackerHook = ($: PluginInput["$"], directory: string) => {
   return async (event: SessionEvent) => {
     // Track session completion for test result logging
     if (event.type === "session.idle") {
@@ -57,7 +57,7 @@ function isTestCommand(command: string): boolean {
 }
 
 async function trackTestExecution(
-  $: Shell,
+  $: PluginInput["$"],
   directory: string,
   command: string,
   result?: string

@@ -109,6 +109,8 @@ export const TDDConfigSchema = z.object({
       orchestratorAppend: z.string().optional(),
       /** Additional instructions appended to Architect prompt */
       architectAppend: z.string().optional(),
+      /** Additional instructions appended to Researcher prompt */
+      researcherAppend: z.string().optional(),
     })
     .default({}),
 })

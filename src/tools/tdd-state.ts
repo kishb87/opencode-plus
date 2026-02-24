@@ -1,12 +1,12 @@
 import { tool } from "@opencode-ai/plugin"
-import type { Shell } from "@opencode-ai/plugin"
+import type { PluginInput, ToolDefinition } from "@opencode-ai/plugin"
 
 /**
  * TDD State Tool
  *
  * Read and update TDD workflow state
  */
-export const tddStateTool = ($: Shell, directory: any) =>
+export const tddStateTool = ($: PluginInput["$"], directory: any): ToolDefinition =>
   tool({
     description: `Read or update TDD workflow state.
 Can mark tasks as complete, update phase, or record Critic feedback.`,

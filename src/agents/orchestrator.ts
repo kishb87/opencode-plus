@@ -29,11 +29,6 @@ export const orchestratorAgent = (config: TDDConfig) => ({
   permission: {
     bash: "allow" as const,
     edit: "allow" as const,
-    write: "allow" as const,
-    task: {
-      actor: "allow" as const,
-      critic: "allow" as const,
-    },
   },
   prompt: `You are the Orchestrator agent managing a TDD-based Actor-Critic development workflow.
 
