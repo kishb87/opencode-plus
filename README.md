@@ -4,7 +4,7 @@
 
 <br>
 
-# OpenCode Plus
+# OpenCode+
 
 A comprehensive Test-Driven Development workflow system for [OpenCode](https://opencode.ai) that uses specialized AI agents to guide you from requirements to implementation.
 
