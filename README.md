@@ -22,10 +22,9 @@ A comprehensive Test-Driven Development workflow system for [OpenCode](https://o
 ## Table of Contents
 
 - [Overview](#overview)
+- [Quick Start](#quick-start)
 - [The Agents](#the-agents)
 - [The Complete Workflow](#the-complete-workflow)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
 - [Detailed Process](#detailed-process)
 - [Commands Reference](#commands-reference)
 - [Project Structure](#project-structure)
@@ -53,6 +52,66 @@ The system uses five specialized agents, each with a specific role:
 │  │Docs      │  │Tech Info │  │Features  │  │Work   │  │Flow        │ │
 │  └──────────┘  └──────────┘  └──────────┘  └───────┘  └────────────┘ │
 └──────────────────────────────────────────────────────────────────────┘
+```
+
+## Quick Start
+
+Add the plugin to your `opencode.json` and OpenCode will install it automatically in the background:
+
+```json
+{
+  "plugin": ["opencode-plus"]
+}
+```
+
+Then launch OpenCode and get started:
+
+```bash
+opencode
+
+# Initialize TDD structure
+> /tdd-init
+
+# Generate everything at once
+> /architect-full "Build a REST API for task management with JWT authentication, PostgreSQL database, and CRUD operations for tasks"
+
+# Start implementation
+> /tdd-start
+
+# Check progress anytime
+> /tdd-status
+```
+
+For a step-by-step approach with review between each phase:
+
+```bash
+opencode
+
+# 1. Initialize
+> /tdd-init
+
+# 2. Generate PRD and review
+> /tdd/prd "Build a REST API for task management"
+# Review .context/prd.md, make edits if needed
+
+# 3. Generate technical spec and review
+> /tdd/spec
+# Review .context/spec/, make edits if needed
+
+# 4. Generate test spec and review
+> /tdd/test-spec
+# Review .context/test/, make edits if needed
+
+# 5. Generate agent spec and review
+> /tdd/agent-spec
+# Review .context/agent-spec.md, make edits if needed
+
+# 6. Generate tasks and review
+> /tdd/tasks
+# Review tasks/, make edits if needed
+
+# 7. Start implementation
+> /tdd-start
 ```
 
 ## The Agents
@@ -386,88 +445,6 @@ graph TD
     └─────────────────────────────────────┘
       ↓
     All tasks complete → Working application with tests ✓
-```
-
-## Installation
-
-### Prerequisites
-
-- Node.js 18+ or Bun 1.0+
-- [OpenCode CLI](https://opencode.ai) installed
-
-### Install Plugin
-
-```bash
-# Using bun (recommended)
-bun add opencode-plus
-
-# Using npm
-npm install opencode-plus
-
-# Using pnpm
-pnpm add opencode-plus
-```
-
-### Configure OpenCode
-
-Add to your `opencode.json`:
-
-```json
-{
-  "plugin": ["opencode-plus"]
-}
-```
-
-## Quick Start
-
-### Option 1: All-in-One (Recommended for new projects)
-
-```bash
-opencode
-
-# Initialize TDD structure
-> /tdd-init
-
-# Generate everything at once
-> /architect-full "Build a REST API for task management with JWT authentication, PostgreSQL database, and CRUD operations for tasks"
-
-# Start implementation
-> /tdd-start
-
-# Check progress anytime
-> /tdd-status
-```
-
-### Option 2: Step-by-Step (Recommended for review between steps)
-
-```bash
-opencode
-
-# 1. Initialize
-> /tdd-init
-
-# 2. Generate PRD and review
-> /tdd/prd "Build a REST API for task management"
-# Review .context/prd.md, make edits if needed
-
-# 3. Generate technical spec and review
-> /tdd/spec
-# Review .context/spec/, make edits if needed
-
-# 4. Generate test spec and review
-> /tdd/test-spec
-# Review .context/test/, make edits if needed
-
-# 5. Generate agent spec and review
-> /tdd/agent-spec
-# Review .context/agent-spec.md, make edits if needed
-
-# 6. Generate tasks and review
-> /tdd/tasks
-# Review tasks/, make edits if needed
-
-# 7. Start implementation
-> /tdd-start
 ```
 
 ## Detailed Process
