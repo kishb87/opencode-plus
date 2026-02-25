@@ -2,12 +2,13 @@
   "name": "opencode-plus",
   "version": "0.1.2",
   "description": "TDD Actor-Critic workflow system for OpenCode - structured test-driven development with AI agents",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -19,8 +20,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "test": "bun test",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",

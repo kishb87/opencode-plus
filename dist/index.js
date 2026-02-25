@@ -1,49 +1,18 @@
-"use strict";
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/index.ts
-var index_exports = {};
-__export(index_exports, {
-  TDDPlugin: () => TDDPlugin,
-  actorAgent: () => actorAgent,
-  architectAgent: () => architectAgent,
-  criticAgent: () => criticAgent,
-  default: () => index_default,
-  loadConfig: () => loadConfig,
-  orchestratorAgent: () => orchestratorAgent,
-  researcherAgent: () => researcherAgent,
-  tddInitTool: () => tddInitTool,
-  tddNextTool: () => tddNextTool,
-  tddStateTool: () => tddStateTool,
-  tddStatusTool: () => tddStatusTool
-});
-module.exports = __toCommonJS(index_exports);
+// node_modules/@opencode-ai/plugin/dist/tool.js
+import { z } from "zod";
+function tool(input) {
+  return input;
+}
+tool.schema = z;
 
 // src/tools/tdd-init.ts
-var import_plugin = require("@opencode-ai/plugin");
-var tddInitTool = ($, directory) => (0, import_plugin.tool)({
+var tddInitTool = ($, directory) => tool({
   description: `Initialize TDD project structure with .context/, .tdd/, and opencode-plus.json config.
 Creates initial state.json for workflow tracking.
 Safe to run multiple times - won't overwrite existing files.`,
   args: {
-    projectType: import_plugin.tool.schema.enum(["node", "python", "go", "rust", "generic"]).optional().describe("Project type for test command defaults"),
-    force: import_plugin.tool.schema.boolean().optional().describe("Force re-initialization (resets state)")
+    projectType: tool.schema.enum(["node", "python", "go", "rust", "generic"]).optional().describe("Project type for test command defaults"),
+    force: tool.schema.boolean().optional().describe("Force re-initialization (resets state)")
   },
   async execute(args) {
     const { projectType = "node", force = false } = args;
@@ -211,108 +180,111 @@ Create docs in .context/ manually`;
   }
 });
 
-// src/tools/tdd-status.ts
-var import_plugin2 = require("@opencode-ai/plugin");
-
 // src/config/loader.ts
-var import_promises = require("fs/promises");
-var import_path = require("path");
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 // src/config/schema.ts
-var import_zod = require("zod");
-var TDDConfigSchema = import_zod.z.object({
+import { z as z2 } from "zod";
+var ModelsSchema = z2.object({
+  /** Model for Actor agent (implements tasks). If not specified, uses the current session model */
+  actor: z2.string().optional(),
+  /** Model for Critic agent (validates tasks). If not specified, uses the current session model */
+  critic: z2.string().optional(),
+  /** Model for Orchestrator agent (coordinates workflow). If not specified, uses the current session model */
+  orchestrator: z2.string().optional(),
+  /** Model for Architect agent (generates documents). If not specified, uses the current session model */
+  architect: z2.string().optional(),
+  /** Model for Researcher agent (gathers documentation). If not specified, uses the current session model */
+  researcher: z2.string().optional()
+});
+var WorkflowSchema = z2.object({
+  /** Maximum retry attempts before escalating */
+  maxRetries: z2.number().min(1).max(10).default(3),
+  /** Automatically run Critic validation after Actor completes */
+  autoValidate: z2.boolean().default(true),
+  /** Test command to run (supports npm, pnpm, yarn, bun) */
+  testCommand: z2.string().default("npm test"),
+  /** Directory for task files */
+  tasksDir: z2.string().default(".context/tasks"),
+  /** Directory for context files */
+  contextDir: z2.string().default(".context"),
+  /** Directory for TDD state */
+  stateDir: z2.string().default(".tdd")
+});
+var DocumentsSchema = z2.object({
+  /** Minimum lines for PRD */
+  minPrdLines: z2.number().min(50).default(300),
+  /** Minimum lines for technical spec (MUST include ALL code) */
+  minSpecLines: z2.number().min(100).default(1200),
+  /** Minimum lines for test spec */
+  minTestLines: z2.number().min(50).default(500),
+  /** Minimum lines for agent spec */
+  minAgentSpecLines: z2.number().min(50).default(150),
+  /** Minimum lines for tasks breakdown */
+  minTasksLines: z2.number().min(100).default(800)
+});
+var FeaturesSchema = z2.object({
+  /** Enable Architect agent for document generation */
+  architectAgent: z2.boolean().default(true),
+  /** Auto-save TDD state on session end */
+  autoSaveState: z2.boolean().default(true),
+  /** Track test command results */
+  testTracking: z2.boolean().default(true),
+  /** Inject TDD context into session compaction */
+  compactionContext: z2.boolean().default(true)
+});
+var PromptsSchema = z2.object({
+  /** Additional instructions appended to Actor prompt */
+  actorAppend: z2.string().optional(),
+  /** Additional instructions appended to Critic prompt */
+  criticAppend: z2.string().optional(),
+  /** Additional instructions appended to Orchestrator prompt */
+  orchestratorAppend: z2.string().optional(),
+  /** Additional instructions appended to Architect prompt */
+  architectAppend: z2.string().optional(),
+  /** Additional instructions appended to Researcher prompt */
+  researcherAppend: z2.string().optional()
+});
+var TDDConfigSchema = z2.object({
   // =========================================
   // AGENT MODEL OVERRIDES
   // =========================================
-  models: import_zod.z.object({
-    /**
-     * Model for Actor agent (implements tasks)
-     * If not specified, uses the current session model
-     */
-    actor: import_zod.z.string().optional(),
-    /**
-     * Model for Critic agent (validates tasks)
-     * If not specified, uses the current session model
-     */
-    critic: import_zod.z.string().optional(),
-    /**
-     * Model for Orchestrator agent (coordinates workflow)
-     * If not specified, uses the current session model
-     */
-    orchestrator: import_zod.z.string().optional(),
-    /**
-     * Model for Architect agent (generates documents)
-     * If not specified, uses the current session model
-     */
-    architect: import_zod.z.string().optional(),
-    /**
-     * Model for Researcher agent (gathers documentation)
-     * If not specified, uses the current session model
-     */
-    researcher: import_zod.z.string().optional()
-  }).default({}),
+  models: ModelsSchema.optional(),
   // =========================================
   // WORKFLOW SETTINGS
   // =========================================
-  workflow: import_zod.z.object({
-    /** Maximum retry attempts before escalating */
-    maxRetries: import_zod.z.number().min(1).max(10).default(3),
-    /** Automatically run Critic validation after Actor completes */
-    autoValidate: import_zod.z.boolean().default(true),
-    /** Test command to run (supports npm, pnpm, yarn, bun) */
-    testCommand: import_zod.z.string().default("npm test"),
-    /** Directory for task files */
-    tasksDir: import_zod.z.string().default(".context/tasks"),
-    /** Directory for context files */
-    contextDir: import_zod.z.string().default(".context"),
-    /** Directory for TDD state */
-    stateDir: import_zod.z.string().default(".tdd")
-  }).default({}),
+  workflow: WorkflowSchema.partial().optional(),
   // =========================================
   // DOCUMENT GENERATION SETTINGS
   // =========================================
-  documents: import_zod.z.object({
-    /** Minimum lines for PRD */
-    minPrdLines: import_zod.z.number().min(50).default(300),
-    /** Minimum lines for technical spec (MUST include ALL code) */
-    minSpecLines: import_zod.z.number().min(100).default(1200),
-    /** Minimum lines for test spec */
-    minTestLines: import_zod.z.number().min(50).default(500),
-    /** Minimum lines for agent spec */
-    minAgentSpecLines: import_zod.z.number().min(50).default(150),
-    /** Minimum lines for tasks breakdown */
-    minTasksLines: import_zod.z.number().min(100).default(800)
-  }).default({}),
+  documents: DocumentsSchema.partial().optional(),
   // =========================================
   // FEATURE FLAGS
   // =========================================
-  features: import_zod.z.object({
-    /** Enable Architect agent for document generation */
-    architectAgent: import_zod.z.boolean().default(true),
-    /** Auto-save TDD state on session end */
-    autoSaveState: import_zod.z.boolean().default(true),
-    /** Track test command results */
-    testTracking: import_zod.z.boolean().default(true),
-    /** Inject TDD context into session compaction */
-    compactionContext: import_zod.z.boolean().default(true)
-  }).default({}),
+  features: FeaturesSchema.partial().optional(),
   // =========================================
   // AGENT PROMPT CUSTOMIZATION
   // =========================================
-  prompts: import_zod.z.object({
-    /** Additional instructions appended to Actor prompt */
-    actorAppend: import_zod.z.string().optional(),
-    /** Additional instructions appended to Critic prompt */
-    criticAppend: import_zod.z.string().optional(),
-    /** Additional instructions appended to Orchestrator prompt */
-    orchestratorAppend: import_zod.z.string().optional(),
-    /** Additional instructions appended to Architect prompt */
-    architectAppend: import_zod.z.string().optional(),
-    /** Additional instructions appended to Researcher prompt */
-    researcherAppend: import_zod.z.string().optional()
-  }).default({})
+  prompts: PromptsSchema.optional()
 });
-var defaultConfig = TDDConfigSchema.parse({});
+var defaultConfig = {
+  models: ModelsSchema.parse({}),
+  workflow: WorkflowSchema.parse({}),
+  documents: DocumentsSchema.parse({}),
+  features: FeaturesSchema.parse({}),
+  prompts: PromptsSchema.parse({})
+};
+function parseConfig(raw) {
+  const parsed = TDDConfigSchema.parse(raw);
+  return {
+    models: ModelsSchema.parse(parsed.models ?? {}),
+    workflow: WorkflowSchema.parse(parsed.workflow ?? {}),
+    documents: DocumentsSchema.parse(parsed.documents ?? {}),
+    features: FeaturesSchema.parse(parsed.features ?? {}),
+    prompts: PromptsSchema.parse(parsed.prompts ?? {})
+  };
+}
 
 // src/config/loader.ts
 async function loadConfig(projectDir) {
@@ -327,16 +299,15 @@ async function loadConfig(projectDir) {
     dirPath = process.cwd();
   }
   const configPaths = [
-    (0, import_path.join)(dirPath, "opencode-plus.json"),
-    (0, import_path.join)(dirPath, ".opencode", "opencode-plus.json"),
-    (0, import_path.join)(process.env.HOME || "~", ".config", "opencode", "opencode-plus.json")
+    join(dirPath, "opencode-plus.json"),
+    join(dirPath, ".opencode", "opencode-plus.json"),
+    join(process.env.HOME || "~", ".config", "opencode", "opencode-plus.json")
   ];
   for (const configPath of configPaths) {
     try {
-      const content = await (0, import_promises.readFile)(configPath, "utf-8");
+      const content = await readFile(configPath, "utf-8");
       const rawConfig = JSON.parse(content);
-      const config = TDDConfigSchema.parse(rawConfig);
-      return config;
+      return parseConfig(rawConfig);
     } catch {
       continue;
     }
@@ -345,12 +316,12 @@ async function loadConfig(projectDir) {
 }
 
 // src/tools/tdd-status.ts
-var tddStatusTool = ($, directory) => (0, import_plugin2.tool)({
+var tddStatusTool = ($, directory) => tool({
   description: `Check TDD workflow progress and current state.
 Shows completed tasks, current task, and next steps.`,
   args: {
-    verbose: import_plugin2.tool.schema.boolean().optional().describe("Show detailed information including task contents"),
-    json: import_plugin2.tool.schema.boolean().optional().describe("Output raw JSON state")
+    verbose: tool.schema.boolean().optional().describe("Show detailed information including task contents"),
+    json: tool.schema.boolean().optional().describe("Output raw JSON state")
   },
   async execute(args) {
     const { verbose = false, json = false } = args;
@@ -470,13 +441,12 @@ function formatDate(isoString) {
 }
 
 // src/tools/tdd-next.ts
-var import_plugin3 = require("@opencode-ai/plugin");
-var tddNextTool = ($, directory) => (0, import_plugin3.tool)({
+var tddNextTool = ($, directory) => tool({
   description: `Get the next TDD task to work on.
 Returns task details including test scope and existing code context.
 Updates state to mark task as current.`,
   args: {
-    peek: import_plugin3.tool.schema.boolean().optional().describe("Only show next task without updating state")
+    peek: tool.schema.boolean().optional().describe("Only show next task without updating state")
   },
   async execute(args) {
     const { peek = false } = args;
@@ -636,15 +606,14 @@ function formatTestList(tests) {
 }
 
 // src/tools/tdd-state.ts
-var import_plugin4 = require("@opencode-ai/plugin");
-var tddStateTool = ($, directory) => (0, import_plugin4.tool)({
+var tddStateTool = ($, directory) => tool({
   description: `Read or update TDD workflow state.
 Can mark tasks as complete, update phase, or record Critic feedback.`,
   args: {
-    action: import_plugin4.tool.schema.enum(["read", "complete_task", "set_phase", "set_feedback", "reset"]).describe("Action to perform"),
-    taskId: import_plugin4.tool.schema.string().optional().describe("Task ID (for complete_task action)"),
-    phase: import_plugin4.tool.schema.enum(["not_started", "in_progress", "actor_working", "critic_validating", "completed", "blocked"]).optional().describe("Workflow phase (for set_phase action)"),
-    feedback: import_plugin4.tool.schema.string().optional().describe("Critic feedback (for set_feedback action)")
+    action: tool.schema.enum(["read", "complete_task", "set_phase", "set_feedback", "reset"]).describe("Action to perform"),
+    taskId: tool.schema.string().optional().describe("Task ID (for complete_task action)"),
+    phase: tool.schema.enum(["not_started", "in_progress", "actor_working", "critic_validating", "completed", "blocked"]).optional().describe("Workflow phase (for set_phase action)"),
+    feedback: tool.schema.string().optional().describe("Critic feedback (for set_feedback action)")
   },
   async execute(args) {
     const { action, taskId, phase, feedback } = args;
@@ -3261,12 +3230,12 @@ ${state.last_critic_feedback || "None"}
   };
 };
 var index_default = TDDPlugin;
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   TDDPlugin,
   actorAgent,
   architectAgent,
   criticAgent,
+  index_default as default,
   loadConfig,
   orchestratorAgent,
   researcherAgent,
@@ -3274,4 +3243,4 @@ var index_default = TDDPlugin;
   tddNextTool,
   tddStateTool,
   tddStatusTool
-});
+};
