@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises"
 import { join } from "path"
-import { TDDConfigSchema, type TDDConfig, defaultConfig } from "./schema"
+import { parseConfig, type TDDConfig, defaultConfig } from "./schema"
 
 /**
  * Load TDD plugin configuration from various locations
@@ -37,10 +37,7 @@ export async function loadConfig(projectDir: any): Promise<TDDConfig> {
     try {
       const content = await readFile(configPath, "utf-8")
       const rawConfig = JSON.parse(content)
-
-      // Validate and merge with defaults
-      const config = TDDConfigSchema.parse(rawConfig)
-      return config
+      return parseConfig(rawConfig)
     } catch {
       // File doesn't exist or is invalid, try next
       continue
@@ -58,13 +55,13 @@ export function mergeConfig(
   base: TDDConfig,
   override: Partial<TDDConfig>
 ): TDDConfig {
-  return TDDConfigSchema.parse({
+  return {
     models: { ...base.models, ...override.models },
     workflow: { ...base.workflow, ...override.workflow },
     documents: { ...base.documents, ...override.documents },
     features: { ...base.features, ...override.features },
     prompts: { ...base.prompts, ...override.prompts },
-  })
+  }
 }
 
-export { TDDConfigSchema, type TDDConfig, defaultConfig }
+export { parseConfig, type TDDConfig, defaultConfig }

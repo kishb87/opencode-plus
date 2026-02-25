@@ -6,9 +6,6 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 5
-    ignore:
-      - dependency-name: "zod"
-        versions: [">=4.0.0"]  # v4 has breaking changes, migration needed
     groups:
       dev-dependencies:
         dependency-type: "development"
