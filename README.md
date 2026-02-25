@@ -4,6 +4,17 @@
 
 <br>
 
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/opencode-plus?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/opencode-plus)
+[![npm downloads](https://img.shields.io/npm/dw/opencode-plus?style=flat-square&color=cb3837)](https://www.npmjs.com/package/opencode-plus)
+[![CI](https://img.shields.io/github/actions/workflow/status/kishb87/opencode-plus/ci.yml?branch=main&style=flat-square&label=CI&logo=github)](https://github.com/kishb87/opencode-plus/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=flat-square&logo=node.js)](https://nodejs.org/)
+
+</div>
+
 # OpenCode+
 
 A comprehensive Test-Driven Development workflow system for [OpenCode](https://opencode.ai) that uses specialized AI agents to guide you from requirements to implementation.

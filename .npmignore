@@ -1,0 +1,25 @@
+# Source files (not needed in published package)
+src/
+plugin.ts
+tsconfig.json
+
+# Dev & CI
+.github/
+.claude/
+node_modules/
+
+# Docs (keep README, exclude verbose docs)
+docs/
+
+# Build artifacts not needed
+*.tsbuildinfo
+
+# Local config
+.env
+.env.*
+opencode-plus.json
+
+# Editor
+.vscode/
+.idea/
+*.swp
