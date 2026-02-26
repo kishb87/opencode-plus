@@ -156,6 +156,22 @@ Run \`tdd_status\` to check current progress.`
         try {
           await $`test -f ${dir}/opencode-plus.json`
         } catch {
+          // NOTE: The "mcp" section controls whether the Bright Data MCP glob
+          // pattern ("brightdata_*") is added to each TDD agent's tool list.
+          // Setting "brightdata" to true here is safe even when the Bright Data
+          // MCP server is NOT installed in OpenCode — unresolved glob patterns
+          // are silently ignored.  To opt out entirely, set it to false.
+          //
+          // To actually use Bright Data tools, add the MCP server to your
+          // opencode.json (project root or ~/.config/opencode/opencode.json):
+          //
+          //   "mcp": {
+          //     "brightdata": {
+          //       "type": "local",
+          //       "command": ["npx", "-y", "@brightdata/mcp"],
+          //       "environment": { "API_TOKEN": "<your-brightdata-api-token>" }
+          //     }
+          //   }
           const configContent = {
             models: {
               actor: "anthropic/claude-sonnet-4-6",
@@ -167,6 +183,9 @@ Run \`tdd_status\` to check current progress.`
             workflow: {
               testCommand: testCommands[projectType],
               tasksDir: ".context/tasks",
+            },
+            mcp: {
+              brightdata: true,
             },
           }
           await $`echo ${JSON.stringify(configContent, null, 2)} > ${dir}/opencode-plus.json`

@@ -61,6 +61,7 @@ export function mergeConfig(
     documents: { ...base.documents, ...override.documents },
     features: { ...base.features, ...override.features },
     prompts: { ...base.prompts, ...override.prompts },
+    mcp: { ...base.mcp, ...override.mcp },
   }
 }
 

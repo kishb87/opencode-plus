@@ -25,6 +25,8 @@ export const orchestratorAgent = (config: TDDConfig) => ({
     edit: true,
     read: true,
     todo: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false,
   },
   permission: {
     bash: "allow" as const,

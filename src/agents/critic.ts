@@ -24,6 +24,8 @@ export const criticAgent = (config: TDDConfig) => ({
     write: false,
     edit: false,
     read: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false,
   },
   permission: {
     bash: "allow" as const,

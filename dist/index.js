@@ -110,15 +110,18 @@ Run \`tdd_status\` to check current progress.`;
       } catch {
         const configContent = {
           models: {
-            // actor: "claude-3-opus",
-            // critic: "gpt-4",
-            // orchestrator: "claude-3-sonnet",
-            // architect: "claude-3-opus",
-            // researcher: "gpt-3.5-turbo",
+            actor: "anthropic/claude-sonnet-4-6",
+            critic: "anthropic/claude-opus-4-6",
+            orchestrator: "anthropic/claude-sonnet-4-6",
+            architect: "anthropic/claude-sonnet-4-6",
+            researcher: "anthropic/claude-sonnet-4-6"
           },
           workflow: {
             testCommand: testCommands[projectType],
             tasksDir: ".context/tasks"
+          },
+          mcp: {
+            brightdata: true
           }
         };
         await $`echo ${JSON.stringify(configContent, null, 2)} > ${dir}/opencode-plus.json`;
@@ -234,6 +237,34 @@ var FeaturesSchema = z2.object({
   /** Inject TDD context into session compaction */
   compactionContext: z2.boolean().default(true)
 });
+var McpSchema = z2.object({
+  /**
+   * Controls whether Bright Data MCP tools are enabled for all TDD agents
+   * (orchestrator, actor, critic).
+   *
+   * - `true` (default): the glob pattern `brightdata_*` is added to each
+   *   agent's tool list.  If the Bright Data MCP server is NOT installed in
+   *   OpenCode, the pattern simply matches nothing and no error is thrown.
+   * - `false`: the glob pattern is omitted entirely so no Bright Data tools
+   *   are visible to any agent.
+   *
+   * To install the Bright Data MCP server, add the following to your
+   * opencode.json (or ~/.config/opencode/opencode.json):
+   *
+   * ```json
+   * "mcp": {
+   *   "brightdata": {
+   *     "type": "local",
+   *     "command": ["npx", "-y", "@brightdata/mcp"],
+   *     "environment": {
+   *       "API_TOKEN": "<your-brightdata-api-token>"
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  brightdata: z2.boolean().optional()
+});
 var PromptsSchema = z2.object({
   /** Additional instructions appended to Actor prompt */
   actorAppend: z2.string().optional(),
@@ -266,14 +297,19 @@ var TDDConfigSchema = z2.object({
   // =========================================
   // AGENT PROMPT CUSTOMIZATION
   // =========================================
-  prompts: PromptsSchema.optional()
+  prompts: PromptsSchema.optional(),
+  // =========================================
+  // MCP SERVER INTEGRATION
+  // =========================================
+  mcp: McpSchema.optional()
 });
 var defaultConfig = {
   models: ModelsSchema.parse({}),
   workflow: WorkflowSchema.parse({}),
   documents: DocumentsSchema.parse({}),
   features: FeaturesSchema.parse({}),
-  prompts: PromptsSchema.parse({})
+  prompts: PromptsSchema.parse({}),
+  mcp: McpSchema.parse({})
 };
 function parseConfig(raw) {
   const parsed = TDDConfigSchema.parse(raw);
@@ -282,7 +318,8 @@ function parseConfig(raw) {
     workflow: WorkflowSchema.parse(parsed.workflow ?? {}),
     documents: DocumentsSchema.parse(parsed.documents ?? {}),
     features: FeaturesSchema.parse(parsed.features ?? {}),
-    prompts: PromptsSchema.parse(parsed.prompts ?? {})
+    prompts: PromptsSchema.parse(parsed.prompts ?? {}),
+    mcp: McpSchema.parse(parsed.mcp ?? {})
   };
 }
 
@@ -707,7 +744,9 @@ var actorAgent = (config) => ({
     bash: true,
     write: true,
     edit: true,
-    read: true
+    read: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false
   },
   permission: {
     bash: "allow",
@@ -1026,7 +1065,9 @@ var criticAgent = (config) => ({
     bash: true,
     write: false,
     edit: false,
-    read: true
+    read: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false
   },
   permission: {
     bash: "allow",
@@ -1297,7 +1338,9 @@ var orchestratorAgent = (config) => ({
     write: true,
     edit: true,
     read: true,
-    todo: true
+    todo: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false
   },
   permission: {
     bash: "allow",

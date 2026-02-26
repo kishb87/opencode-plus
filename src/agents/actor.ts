@@ -23,6 +23,8 @@ export const actorAgent = (config: TDDConfig) => ({
     write: true,
     edit: true,
     read: true,
+    // Bright Data MCP tools (no-op if MCP not installed)
+    "brightdata_*": config.mcp?.brightdata !== false,
   },
   permission: {
     bash: "allow" as const,
