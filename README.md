@@ -86,22 +86,22 @@ The Critic is skeptical by design. It doesn't trust the Actor's self-reports. It
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    DIALECTICAL LOOP                               │
-│                                                                   │
-│   ┌──────────┐                              ┌──────────┐       │
-│   │  ACTOR   │         feedback              │  CRITIC  │       │
-│   │          │  ─────────────────────────>   │          │       │
-│   │ Implement│                               │ Review   │       │
-│   │ (Thesis) │  <─────────────────────────   │(Antithes)│       │
-│   │          │         verdict                │          │       │
-│   └──────────┘                              └──────────┘       │
-│        ↑                                          ↑              │
-│        │              ORCHESTRATOR                │              │
-│        │         (Coordinates, manages state)     │              │
-│        └──────────────────────────────────────────┘              │
-│                                                                   │
-│   Fresh context per invocation. No shared reasoning.             │
-│   Bounded by: max turns, test scope, task requirements.          │
+│                    DIALECTICAL LOOP                             │
+│                                                                 │
+│   ┌──────────┐                              ┌─────────────┐     │
+│   │  ACTOR   │         feedback             │  CRITIC     │     │
+│   │          │  ─────────────────────────>  │             │     │
+│   │ Implement│                              │ Review      │     │
+│   │ (Thesis) │  <─────────────────────────  │(Antithesis) │     │
+│   │          │         verdict              │             │     │
+│   └──────────┘                              └─────────────┘     │
+│        ↑                                          ↑             │
+│        │              ORCHESTRATOR                │             │
+│        │         (Coordinates, manages state)     │             │
+│        └──────────────────────────────────────────┘             │
+│                                                                 │
+│   Fresh context per invocation. No shared reasoning.            │
+│   Bounded by: max turns, test scope, task requirements.         │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
